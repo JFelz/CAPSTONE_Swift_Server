@@ -1,9 +1,22 @@
 using CAPSTONE_Swift_Server.Models;
+using CAPSTONE_Swift_Server;
 using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http.Json;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(
+                      policy =>
+                      {
+                          policy.WithOrigins("https://localhost:7143",
+                                              "http://localhost:3000")
+                                               .AllowAnyHeader()
+                                               .AllowAnyMethod();
+                      });
+});
 
 
 // allows passing datetimes without time zone data 
@@ -33,6 +46,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
 
 
 
