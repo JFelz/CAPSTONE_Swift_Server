@@ -12,7 +12,7 @@ namespace CAPSTONE_Swift_Server.Models
 
         public int CustomerId { get; set; }
         public int PaymentId { get; set; }
-        public int OrderStatus { get; set; }
+        public int OrderStatusId { get; set; }
 
         #endregion
 

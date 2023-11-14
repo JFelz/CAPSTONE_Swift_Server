@@ -18,5 +18,9 @@ namespace CAPSTONE_Swift_Server
         public SwiftDbContext(DbContextOptions<SwiftDbContext> context) : base(context)
         {
         }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+ => optionsBuilder
+     .UseNpgsql()
+     .UseSnakeCaseNamingConvention();
     }
 }
