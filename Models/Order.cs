@@ -18,7 +18,7 @@ namespace CAPSTONE_Swift_Server.Models
 
         #region Relationships
 
-        public List<Product> Products { get; set; }
+        public List<Product> ProductList { get; set; }
 
         #endregion
 

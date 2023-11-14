@@ -9,12 +9,12 @@ namespace CAPSTONE_Swift_Server.Models
 		[Required]
 
 		public int AdminId { get; set; }
-		public int CommentId { get; set; }
+		public int ReviewId { get; set; }
 
         #region Relationships
 
-        public List<Order> Orders { get; set; }
-		public List<Review> Reviews { get; set; }
+        public List<Order> OrderList { get; set; }
+		public List<Review> ReviewList { get; set; }
 
         #endregion
 
