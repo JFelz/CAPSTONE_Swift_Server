@@ -9,7 +9,9 @@ namespace CAPSTONE_Swift_Server.Models
 
         public int Id { get; set; }
 		[Required]
-		public int PaymentId { get; set; }
+
+        public string Uid { get; set; }
+        public int PaymentId { get; set; }
 
         #endregion
 

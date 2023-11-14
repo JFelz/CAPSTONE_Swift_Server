@@ -9,7 +9,6 @@ namespace CAPSTONE_Swift_Server.Models
 		[Required]
 
 		public int AdminId { get; set; }
-		public int ReviewId { get; set; }
 
         #region Relationships
 
@@ -29,6 +28,7 @@ namespace CAPSTONE_Swift_Server.Models
         public string ImageUrl1 { get; set; }
         public string ImageUrl2 { get; set; }
         public string ImageUrl3 { get; set; }
+
     }
 }
 
