@@ -7,13 +7,13 @@ namespace CAPSTONE_Swift_Server
 {
 	public class SwiftDbContext : DbContext
 	{
-		public DbSet<Administrator> administrators { get; set; }
-		public DbSet<Customer> customers { get; set; }
-		public DbSet<Order> orders { get; set; }
-		public DbSet<Product> products { get; set; }
-		public DbSet<Review> reviews { get; set; }
-		public DbSet<PaymentType> paymentTypes { get; set; }
-		public DbSet<OrderStatus> orderStatuses { get; set; }
+		public DbSet<Administrator> Administrators { get; set; }
+		public DbSet<Customer> Customers { get; set; }
+		public DbSet<Order> Orders { get; set; }
+		public DbSet<Product> Products { get; set; }
+		public DbSet<Review> Reviews { get; set; }
+		public DbSet<PaymentType> PaymentTypes { get; set; }
+		public DbSet<OrderStatus> OrderStatuses { get; set; }
 
         public SwiftDbContext(DbContextOptions<SwiftDbContext> context) : base(context)
         {
