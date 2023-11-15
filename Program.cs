@@ -3,6 +3,8 @@ using CAPSTONE_Swift_Server;
 using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http.Json;
+using System.Diagnostics.Metrics;
+using System.Reflection.Emit;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -79,6 +81,105 @@ app.UseAuthorization();
 
 #region Order
 
+// View All Orders
+app.MapGet("/orders", (SwiftDbContext db) => {
+
+    return db.Orders.ToList();
+
+});
+
+// View A Single Order
+app.MapGet("/orders/{oId}", (SwiftDbContext db, int oId) => {
+
+    return db.Orders.FirstOrDefault(o => o.Id == oId);
+
+});
+
+// View Produ
+
+// Create New Order
+app.MapPost("/orders/new", (SwiftDbContext db, Order Payload) =>
+{
+
+    Order NewOrder = new Order()
+    {
+        CustomerName = Payload.CustomerName,
+        CustomerEmail = Payload.CustomerEmail,
+        CustomerPhoneNumber = Payload.CustomerPhoneNumber,
+        StreetAddress = Payload.StreetAddress,
+        Country = Payload.Country,
+        TownCity = Payload.TownCity,
+        State = Payload.State,
+        Zipcode = Payload.Zipcode,
+        DateTime = Payload.DateTime,
+        Revenue = Payload.Revenue,
+        PaymentId = Payload.PaymentId,
+        OrderStatusId = Payload.PaymentId,
+        ShippingMethod = Payload.ShippingMethod,
+    };
+
+    db.Orders.Add(NewOrder);
+    db.SaveChanges();
+    return Results.Ok();
+});
+
+// Update Order
+app.MapPut("/orders/update/{oId}", (SwiftDbContext db, int oId, Order Payload) => {
+
+    Order SelectedOrder = db.Orders.FirstOrDefault(o => o.Id == oId);
+
+    SelectedOrder.CustomerName = Payload.CustomerName;
+    SelectedOrder.CustomerEmail = Payload.CustomerEmail;
+    SelectedOrder.CustomerPhoneNumber = Payload.CustomerPhoneNumber;
+    SelectedOrder.StreetAddress = Payload.StreetAddress;
+    SelectedOrder.Country = Payload.Country;
+    SelectedOrder.TownCity = Payload.TownCity;
+    SelectedOrder.State = Payload.State;
+    SelectedOrder.Zipcode = Payload.Zipcode;
+    SelectedOrder.DateTime = Payload.DateTime;
+    SelectedOrder.Revenue = Payload.Revenue;
+    SelectedOrder.PaymentId = Payload.PaymentId;
+    SelectedOrder.OrderStatusId = Payload.PaymentId;
+
+    db.SaveChanges();
+    return Results.Ok("The existing order has been updated.");
+});
+
+// Delete An Order
+app.MapDelete("/orders/remove/{oId}", (SwiftDbContext db, int oId) => {
+
+    Order SelectedOrder= db.Orders.FirstOrDefault(o => o.Id == oId);
+
+    db.Orders.Remove(SelectedOrder);
+    db.SaveChanges();
+    return Results.Ok("Order has been removed.");
+
+});
+
+// Get Products from an Order
+
+app.MapGet("/orders/{id}/products", (SwiftDbContext db, int id) =>
+{
+    try
+    {
+        var SingleOrder = db.Orders
+            .Where(db => db.Id == id)
+            .Include(Order => Order.ProductList)
+            .ToList();
+
+        if (SingleOrder == null)
+        {
+            return Results.NotFound("Sorry for the inconvenience! This order does not exist.");
+        }
+        return Results.Ok(SingleOrder);
+    }
+    catch (Exception ex)
+    {
+        return Results.Problem(ex.Message);
+    }
+});
+
+
 #endregion
 
 #region Product
@@ -151,29 +252,6 @@ app.MapDelete("/products/remove/{pId}", (SwiftDbContext db, int pId) => {
     db.SaveChanges();
     return Results.Ok("The product has been removed.");
 
-});
-
-// Get Products from an Order
-
-app.MapGet("/orders/{id}/products", (SwiftDbContext db, int id) =>
-{
-    try
-    {
-        var SingleOrder = db.Orders
-            .Where(db => db.Id == id)
-            .Include(Order => Order.ProductList)
-            .ToList();
-
-        if (SingleOrder == null)
-        {
-            return Results.NotFound("Sorry for the inconvenience! This order does not exist.");
-        }
-        return Results.Ok(SingleOrder);
-    }
-    catch (Exception ex)
-    {
-        return Results.Problem(ex.Message);
-    }
 });
 
 // Add Product to an Order
