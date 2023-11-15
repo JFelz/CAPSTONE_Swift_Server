@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CAPSTONE_Swift_Server.Migrations
 {
     [DbContext(typeof(SwiftDbContext))]
-    [Migration("20231114205604_SwiftMac")]
+    [Migration("20231115150527_SwiftMac")]
     partial class SwiftMac
     {
         /// <inheritdoc />
