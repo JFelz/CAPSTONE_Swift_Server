@@ -231,6 +231,132 @@ app.MapDelete("/orders/{orderId}/list/{productId}/remove", (SwiftDbContext db, i
 
 #region Review
 
+// View All Reviews
+app.MapGet("/reviews", (SwiftDbContext db) => {
+
+    return db.Reviews.ToList();
+
+});
+
+// View A Single Review
+app.MapGet("/reviews/{rId}", (SwiftDbContext db, int rId) => {
+
+    return db.Reviews.FirstOrDefault(o => o.Id == rId);
+
+});
+
+// Create A Review
+app.MapPost("/reviews/new", (SwiftDbContext db, Review Payload) =>
+{
+
+    Review NewReview = new Review()
+    {
+        Content = Payload.Content,
+    };
+
+    db.Reviews.Add(NewReview);
+    db.SaveChanges();
+    return Results.Ok();
+});
+
+// Update A Review
+app.MapPut("/reviews/update/{rId}", (SwiftDbContext db, int rId, Review payload) => {
+
+    Review SelectedReview = db.Reviews.FirstOrDefault(o => o.Id == rId);
+
+    SelectedReview.Content = payload.Content;
+
+    db.SaveChanges();
+    return Results.Ok("The existing review has been updated.");
+
+});
+
+// Delete A Review
+app.MapDelete("/reviews/remove/{rId}", (SwiftDbContext db, int rId) => {
+
+    Review SelectedReview = db.Reviews.FirstOrDefault(o => o.Id == rId);
+
+    db.Reviews.Remove(SelectedReview);
+    db.SaveChanges();
+    return Results.Ok("The review has been removed.");
+
+});
+
+// Get Reviews from a Product
+
+app.MapGet("/products/{id}/reviews", (SwiftDbContext db, int id) =>
+{
+    try
+    {
+        var ProdReviewList = db.Products
+            .Where(db => db.Id == id)
+            .Include(p => p.ReviewList)
+            .ToList();
+
+        if (ProdReviewList == null)
+        {
+            return Results.NotFound("Sorry for the inconvenience! This order does not exist.");
+        }
+        return Results.Ok(ProdReviewList);
+    }
+    catch (Exception ex)
+    {
+        return Results.Problem(ex.Message);
+    }
+});
+
+// Add Review to an Product
+
+app.MapPost("/products/{pId}/add", (SwiftDbContext db, int pId, Review payload) =>
+{
+    // Retrieve object reference of Orders in order to manipulate (Not a query result)
+    var ProdReviewList = db.Products
+    .Where(o => o.Id == pId)
+    .Include(o => o.ReviewList)
+    .FirstOrDefault();
+
+    if (ProdReviewList == null)
+    {
+        return Results.NotFound("Order not found.");
+    }
+
+    ProdReviewList.ReviewList.Add(payload);
+
+    db.SaveChanges();
+
+    return Results.Ok(ProdReviewList);
+
+});
+
+// Remove Review from an Product
+
+app.MapDelete("/products/{pId}/reviewlist/{rId}/remove", (SwiftDbContext db, int pId, int rId) =>
+{
+    try
+    {
+        // Include should come first before selecting
+        var SingleProduct = db.Products
+            .Include(p => p.ReviewList)
+            .FirstOrDefault(db => db.Id == pId);
+
+        if (SingleProduct == null)
+        {
+            return Results.NotFound("Sorry for the inconvenience! This order does not exist.");
+        }
+        // The reason why it didn't work before is because I didnt have a method after ProductList
+        var SelectedProductList = SingleProduct.ReviewList.FirstOrDefault(r => r.Id == rId);
+        SingleProduct.ReviewList.Remove(SelectedProductList);
+
+        db.SaveChanges();
+        return Results.Ok(SingleProduct.ReviewList);
+    }
+    catch (Exception ex)
+    {
+        return Results.Problem(ex.Message);
+    }
+});
+
+
 #endregion
 
 
