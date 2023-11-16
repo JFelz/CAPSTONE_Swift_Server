@@ -60,18 +60,63 @@ app.UseAuthorization();
 
 #region Admin
 
-//app.MapGet("/admin/{uid}", (SwiftDbContext db, string uid) =>
-//{
-//    var user = db.Administrators.Where(x => x.Uid == uid).ToList();
-//    if (uid == null)
-//    {
-//        return Results.NotFound("Sorry, Cashier not found!");
-//    }
-//    else
-//    {
-//        return Results.Ok(user);
-//    }
-//});
+// Get All Admin
+app.MapGet("/admin/all", (SwiftDbContext db) =>
+{
+    return db.Administrators.ToList();
+});
+
+// Get Single Admin by UID
+app.MapGet("/admin/{uid}", (SwiftDbContext db, string uid) =>
+{
+    return db.Administrators.FirstOrDefault(x => x.Uid == uid);
+});
+
+// Get Single Admin by ID
+app.MapGet("/admin/get/{adminId}", (SwiftDbContext db, int adminId) =>
+{
+    return db.Administrators.FirstOrDefault(x => x.Id == adminId);
+
+});
+
+// Register Admin
+app.MapPost("/admin/new", (SwiftDbContext db, Administrator Payload) =>
+{
+    Administrator NewAdmin = new Administrator()
+    {
+        Name = Payload.Name,
+        Email = Payload.Email,
+        PhoneNumber = Payload.PhoneNumber,
+        ImageUrl = Payload.ImageUrl,
+        PaymentId = Payload.PaymentId,
+        Uid = Payload.Uid,
+    };
+
+    db.Administrators.Add(NewAdmin);
+    db.SaveChanges();
+    return Results.Created("/admin/new", NewAdmin);
+});
+
+// Edit Admin Info
+app.MapPut("/admin/{uId}/update", (SwiftDbContext db, string uId, Administrator Payload) =>
+{
+    var Admin = db.Administrators.FirstOrDefault(x => x.Uid == uId);
+
+    if (Admin == null)
+    {
+        return Results.NotFound("The administrator you were searching for has not been found. Please make sure they exist within the database.");
+    }
+
+    Admin.Name = Payload.Name;
+    Admin.Email = Payload.Email;
+    Admin.PhoneNumber = Payload.PhoneNumber;
+    Admin.ImageUrl = Payload.ImageUrl;
+    Admin.PaymentId = Payload.PaymentId;
+    Admin.Uid = Payload.Uid;
+
+    db.SaveChanges();
+    return Results.Ok(Admin);
+});
 
 #endregion
 
@@ -161,7 +206,6 @@ app.MapGet("/orders/{oId}", (SwiftDbContext db, int oId) => {
 
 });
 
-// View Produ
 
 // Create New Order
 app.MapPost("/orders/new", (SwiftDbContext db, Order Payload) =>
