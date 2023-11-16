@@ -38,6 +38,7 @@ namespace CAPSTONE_Swift_Server.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     uid = table.Column<string>(type: "text", nullable: false),
                     name = table.Column<string>(type: "text", nullable: false),
+                    bio = table.Column<string>(type: "text", nullable: false),
                     email = table.Column<string>(type: "text", nullable: false),
                     phone_number = table.Column<long>(type: "bigint", nullable: false),
                     image_url = table.Column<string>(type: "text", nullable: false)
