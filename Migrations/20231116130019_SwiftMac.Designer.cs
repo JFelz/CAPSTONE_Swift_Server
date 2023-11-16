@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CAPSTONE_Swift_Server.Migrations
 {
     [DbContext(typeof(SwiftDbContext))]
-    [Migration("20231115150527_SwiftMac")]
+    [Migration("20231116130019_SwiftMac")]
     partial class SwiftMac
     {
         /// <inheritdoc />
@@ -76,6 +76,11 @@ namespace CAPSTONE_Swift_Server.Migrations
                         .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Bio")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("bio");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -165,6 +170,11 @@ namespace CAPSTONE_Swift_Server.Migrations
                         .HasColumnType("text")
                         .HasColumnName("state");
 
+                    b.Property<string>("StreetAddress")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("street_address");
+
                     b.Property<string>("TownCity")
                         .IsRequired()
                         .HasColumnType("text")
@@ -173,11 +183,6 @@ namespace CAPSTONE_Swift_Server.Migrations
                     b.Property<int>("Zipcode")
                         .HasColumnType("integer")
                         .HasColumnName("zipcode");
-
-                    b.Property<string>("streetAddress")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("street_address");
 
                     b.HasKey("Id")
                         .HasName("pk_orders");

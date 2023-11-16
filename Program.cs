@@ -77,6 +77,72 @@ app.UseAuthorization();
 
 #region Customer
 
+// Get All Customers
+
+app.MapGet("/customers", (SwiftDbContext db) =>
+{
+    return db.Customers.ToList();
+});
+
+// Get Single Customer by Id
+
+app.MapGet("/customers/{cId}", (SwiftDbContext db, int cId) =>
+{
+    return db.Customers.FirstOrDefault(x => x.Id == cId);
+});
+
+//// Get Single Customer by UID
+
+app.MapGet("/customers/{uId}", (SwiftDbContext db, string uId) =>
+{
+    var Customer = db.Customers.FirstOrDefault(x => x.Uid == uId);
+
+    if (Customer == null)
+    {
+        return Results.NotFound("Sorry, Customer not found!");
+    }
+    else
+    {
+        return Results.Ok(Customer);
+    }
+});
+
+// Register New User
+app.MapPost("/register", (SwiftDbContext db, Customer payload) =>
+{
+    Customer NewCustomer = new Customer()
+    {
+        Name = payload.Name,
+        Bio = payload.Bio,
+        Email = payload.Email,
+        PhoneNumber = payload.PhoneNumber,
+        ImageUrl = payload.ImageUrl,
+        Uid = payload.Uid,
+    };
+
+    db.Customers.Add(NewCustomer);
+    db.SaveChanges();
+    return Results.Ok(NewCustomer.Name);
+});
+
+// Update Customer
+app.MapPut("/customers/update/{uid}", (SwiftDbContext db, string uid, Customer NewCustomer) =>
+{
+    Customer SelectedCustomer = db.Customers.FirstOrDefault(x => x.Uid == uid);
+    if (SelectedCustomer == null)
+    {
+        return Results.NotFound("This customer is not found in the database. Please Try again!");
+    }
+
+    SelectedCustomer.Name = NewCustomer.Name;
+    SelectedCustomer.Email = NewCustomer.Email;
+    SelectedCustomer.PhoneNumber = NewCustomer.PhoneNumber;
+    SelectedCustomer.ImageUrl = NewCustomer.ImageUrl;
+    db.SaveChanges();
+    return Results.Created("/customers/update/{uid}", SelectedCustomer);
+
+});
+
 #endregion
 
 #region Order
