@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CAPSTONE_Swift_Server.Models
 {
-	public class Customer
+	public class User
 	{
         #region Id
 
@@ -20,6 +20,7 @@ namespace CAPSTONE_Swift_Server.Models
         public string Email { get; set; }
         public long PhoneNumber { get; set; }
 		public string ImageUrl { get; set; }
+        public bool IsAdmin { get; set; }
 
         #endregion
     }

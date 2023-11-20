@@ -13,42 +13,6 @@ namespace CAPSTONE_Swift_Server.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "administrators",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    uid = table.Column<string>(type: "text", nullable: false),
-                    payment_id = table.Column<int>(type: "integer", nullable: false),
-                    name = table.Column<string>(type: "text", nullable: false),
-                    email = table.Column<string>(type: "text", nullable: false),
-                    phone_number = table.Column<long>(type: "bigint", nullable: false),
-                    image_url = table.Column<string>(type: "text", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("pk_administrators", x => x.id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "customers",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    uid = table.Column<string>(type: "text", nullable: false),
-                    name = table.Column<string>(type: "text", nullable: false),
-                    bio = table.Column<string>(type: "text", nullable: false),
-                    email = table.Column<string>(type: "text", nullable: false),
-                    phone_number = table.Column<long>(type: "bigint", nullable: false),
-                    image_url = table.Column<string>(type: "text", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("pk_customers", x => x.id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "order_statuses",
                 columns: table => new
                 {
@@ -139,6 +103,25 @@ namespace CAPSTONE_Swift_Server.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "users",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    uid = table.Column<string>(type: "text", nullable: false),
+                    name = table.Column<string>(type: "text", nullable: false),
+                    bio = table.Column<string>(type: "text", nullable: false),
+                    email = table.Column<string>(type: "text", nullable: false),
+                    phone_number = table.Column<long>(type: "bigint", nullable: false),
+                    image_url = table.Column<string>(type: "text", nullable: false),
+                    is_admin = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_users", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "order_product",
                 columns: table => new
                 {
@@ -201,12 +184,6 @@ namespace CAPSTONE_Swift_Server.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "administrators");
-
-            migrationBuilder.DropTable(
-                name: "customers");
-
-            migrationBuilder.DropTable(
                 name: "order_product");
 
             migrationBuilder.DropTable(
@@ -217,6 +194,9 @@ namespace CAPSTONE_Swift_Server.Migrations
 
             migrationBuilder.DropTable(
                 name: "product_review");
+
+            migrationBuilder.DropTable(
+                name: "users");
 
             migrationBuilder.DropTable(
                 name: "orders");
