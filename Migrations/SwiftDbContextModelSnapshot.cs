@@ -22,93 +22,6 @@ namespace CAPSTONE_Swift_Server.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("CAPSTONE_Swift_Server.Models.Administrator", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("email");
-
-                    b.Property<string>("ImageUrl")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("image_url");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("name");
-
-                    b.Property<int>("PaymentId")
-                        .HasColumnType("integer")
-                        .HasColumnName("payment_id");
-
-                    b.Property<long>("PhoneNumber")
-                        .HasColumnType("bigint")
-                        .HasColumnName("phone_number");
-
-                    b.Property<string>("Uid")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("uid");
-
-                    b.HasKey("Id")
-                        .HasName("pk_administrators");
-
-                    b.ToTable("administrators", (string)null);
-                });
-
-            modelBuilder.Entity("CAPSTONE_Swift_Server.Models.Customer", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Bio")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("bio");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("email");
-
-                    b.Property<string>("ImageUrl")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("image_url");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("name");
-
-                    b.Property<long>("PhoneNumber")
-                        .HasColumnType("bigint")
-                        .HasColumnName("phone_number");
-
-                    b.Property<string>("Uid")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("uid");
-
-                    b.HasKey("Id")
-                        .HasName("pk_customers");
-
-                    b.ToTable("customers", (string)null);
-                });
-
             modelBuilder.Entity("CAPSTONE_Swift_Server.Models.Order", b =>
                 {
                     b.Property<int>("Id")
@@ -318,6 +231,54 @@ namespace CAPSTONE_Swift_Server.Migrations
                         .HasName("pk_reviews");
 
                     b.ToTable("reviews", (string)null);
+                });
+
+            modelBuilder.Entity("CAPSTONE_Swift_Server.Models.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Bio")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("bio");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("email");
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("image_url");
+
+                    b.Property<bool>("IsAdmin")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_admin");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("name");
+
+                    b.Property<long>("PhoneNumber")
+                        .HasColumnType("bigint")
+                        .HasColumnName("phone_number");
+
+                    b.Property<string>("Uid")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("uid");
+
+                    b.HasKey("Id")
+                        .HasName("pk_users");
+
+                    b.ToTable("users", (string)null);
                 });
 
             modelBuilder.Entity("OrderProduct", b =>

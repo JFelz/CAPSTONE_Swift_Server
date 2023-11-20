@@ -58,104 +58,42 @@ app.UseAuthorization();
 
 // API
 
-#region Admin
+// Get All Users
 
-// Get All Admin
-app.MapGet("/admin/all", (SwiftDbContext db) =>
+#region Users
+
+app.MapGet("/users", (SwiftDbContext db) =>
 {
-    return db.Administrators.ToList();
-});
-
-// Get Single Admin by UID
-app.MapGet("/admin/{uid}", (SwiftDbContext db, string uid) =>
-{
-    return db.Administrators.FirstOrDefault(x => x.Uid == uid);
-});
-
-// Get Single Admin by ID
-app.MapGet("/admin/get/{adminId}", (SwiftDbContext db, int adminId) =>
-{
-    return db.Administrators.FirstOrDefault(x => x.Id == adminId);
-
-});
-
-// Register Admin
-app.MapPost("/admin/new", (SwiftDbContext db, Administrator Payload) =>
-{
-    Administrator NewAdmin = new Administrator()
-    {
-        Name = Payload.Name,
-        Email = Payload.Email,
-        PhoneNumber = Payload.PhoneNumber,
-        ImageUrl = Payload.ImageUrl,
-        PaymentId = Payload.PaymentId,
-        Uid = Payload.Uid,
-    };
-
-    db.Administrators.Add(NewAdmin);
-    db.SaveChanges();
-    return Results.Created("/admin/new", NewAdmin);
-});
-
-// Edit Admin Info
-app.MapPut("/admin/{uId}/update", (SwiftDbContext db, string uId, Administrator Payload) =>
-{
-    var Admin = db.Administrators.FirstOrDefault(x => x.Uid == uId);
-
-    if (Admin == null)
-    {
-        return Results.NotFound("The administrator you were searching for has not been found. Please make sure they exist within the database.");
-    }
-
-    Admin.Name = Payload.Name;
-    Admin.Email = Payload.Email;
-    Admin.PhoneNumber = Payload.PhoneNumber;
-    Admin.ImageUrl = Payload.ImageUrl;
-    Admin.PaymentId = Payload.PaymentId;
-    Admin.Uid = Payload.Uid;
-
-    db.SaveChanges();
-    return Results.Ok(Admin);
-});
-
-#endregion
-
-#region Customer
-
-// Get All Customers
-
-app.MapGet("/customers", (SwiftDbContext db) =>
-{
-    return db.Customers.ToList();
+    return db.Users.ToList();
 });
 
 // Get Single Customer by Id
 
-app.MapGet("/customers/{cId}", (SwiftDbContext db, int cId) =>
+app.MapGet("/users/{cId}", (SwiftDbContext db, int cId) =>
 {
-    return db.Customers.FirstOrDefault(x => x.Id == cId);
+    return db.Users.FirstOrDefault(x => x.Id == cId);
 });
 
 //// Get Single Customer by UID
 
-app.MapGet("/customers/{uId}", (SwiftDbContext db, string uId) =>
+app.MapGet("/users/{uId}", (SwiftDbContext db, string uId) =>
 {
-    var Customer = db.Customers.FirstOrDefault(x => x.Uid == uId);
+    var User = db.Users.FirstOrDefault(x => x.Uid == uId);
 
-    if (Customer == null)
+    if (User == null)
     {
         return Results.NotFound("Sorry, Customer not found!");
     }
     else
     {
-        return Results.Ok(Customer);
+        return Results.Ok(User);
     }
 });
 
 // Register New User
-app.MapPost("/register", (SwiftDbContext db, Customer payload) =>
+app.MapPost("/register", (SwiftDbContext db, User payload) =>
 {
-    Customer NewCustomer = new Customer()
+    User NewUser = new User()
     {
         Name = payload.Name,
         Bio = payload.Bio,
@@ -165,26 +103,26 @@ app.MapPost("/register", (SwiftDbContext db, Customer payload) =>
         Uid = payload.Uid,
     };
 
-    db.Customers.Add(NewCustomer);
+    db.Users.Add(NewUser);
     db.SaveChanges();
-    return Results.Ok(NewCustomer.Name);
+    return Results.Ok(NewUser.Name);
 });
 
-// Update Customer
-app.MapPut("/customers/update/{uid}", (SwiftDbContext db, string uid, Customer NewCustomer) =>
+// Update User
+app.MapPut("/users/update/{uid}", (SwiftDbContext db, string uid, User NewUser) =>
 {
-    Customer SelectedCustomer = db.Customers.FirstOrDefault(x => x.Uid == uid);
-    if (SelectedCustomer == null)
+    User SelectedUser = db.Users.FirstOrDefault(x => x.Uid == uid);
+    if (SelectedUser == null)
     {
         return Results.NotFound("This customer is not found in the database. Please Try again!");
     }
 
-    SelectedCustomer.Name = NewCustomer.Name;
-    SelectedCustomer.Email = NewCustomer.Email;
-    SelectedCustomer.PhoneNumber = NewCustomer.PhoneNumber;
-    SelectedCustomer.ImageUrl = NewCustomer.ImageUrl;
+    SelectedUser.Name = NewUser.Name;
+    SelectedUser.Email = NewUser.Email;
+    SelectedUser.PhoneNumber = NewUser.PhoneNumber;
+    SelectedUser.ImageUrl = NewUser.ImageUrl;
     db.SaveChanges();
-    return Results.Created("/customers/update/{uid}", SelectedCustomer);
+    return Results.Created("/users/update/{uid}", SelectedUser);
 
 });
 
