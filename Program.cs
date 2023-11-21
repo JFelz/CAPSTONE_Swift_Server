@@ -1,25 +1,33 @@
 using CAPSTONE_Swift_Server.Models;
-using CAPSTONE_Swift_Server;
-using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Http.Json;
-using System.Diagnostics.Metrics;
-using System.Reflection.Emit;
+using CAPSTONE_Swift_Server;
+using EFCore.NamingConventions;
+using System.Security.Cryptography;
+
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Add services to the container.
+
 builder.Services.AddCors(options =>
 {
-    options.AddDefaultPolicy(
+    options.AddPolicy(name: MyAllowSpecificOrigins,
                       policy =>
                       {
-                          policy.WithOrigins("https://localhost:7261",
-                                              "http://localhost:3000")
-                                               .AllowAnyHeader()
-                                               .AllowAnyMethod();
+                          policy.WithOrigins("http://localhost:3000",
+                                              "https://localhost:7261")
+                          .AllowAnyHeader()
+                          .AllowAnyMethod();
                       });
 });
 
+builder.Services.AddControllers();
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 // allows passing datetimes without time zone data 
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
@@ -33,12 +41,6 @@ builder.Services.Configure<JsonOptions>(options =>
     options.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
 });
 
-builder.Services.AddControllers();
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -50,7 +52,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseCors();
+app.UseCors(MyAllowSpecificOrigins);
+
+app.UseRouting();
 
 app.UseAuthentication();
 
@@ -69,14 +73,14 @@ app.MapGet("/users", (SwiftDbContext db) =>
 
 // Get Single Customer by Id
 
-app.MapGet("/users/{cId}", (SwiftDbContext db, int cId) =>
+app.MapGet("/users/byIden/{cId}", (SwiftDbContext db, int cId) =>
 {
     return db.Users.FirstOrDefault(x => x.Id == cId);
 });
 
 //// Get Single Customer by UID
 
-app.MapGet("/users/{uId}", (SwiftDbContext db, string uId) =>
+app.MapGet("/users/auth/{uId}", (SwiftDbContext db, string uId) =>
 {
     var User = db.Users.FirstOrDefault(x => x.Uid == uId);
 
@@ -101,6 +105,7 @@ app.MapPost("/register", (SwiftDbContext db, User payload) =>
         PhoneNumber = payload.PhoneNumber,
         ImageUrl = payload.ImageUrl,
         Uid = payload.Uid,
+        IsAdmin = payload.IsAdmin,
     };
 
     db.Users.Add(NewUser);
