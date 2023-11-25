@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CAPSTONE_Swift_Server.Migrations
 {
     [DbContext(typeof(SwiftDbContext))]
-    [Migration("20231120225615_SwiftPC")]
-    partial class SwiftPC
+    [Migration("20231121131420_SwiftMac")]
+    partial class SwiftMac
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
