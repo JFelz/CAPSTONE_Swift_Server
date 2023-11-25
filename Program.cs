@@ -71,14 +71,14 @@ app.MapGet("/users", (SwiftDbContext db) =>
     return db.Users.ToList();
 });
 
-// Get Single Customer by Id
+// Get Single Users by Id
 
 app.MapGet("/users/byIden/{cId}", (SwiftDbContext db, int cId) =>
 {
     return db.Users.FirstOrDefault(x => x.Id == cId);
 });
 
-//// Get Single Customer by UID
+//// Get Single Users by UID
 
 app.MapGet("/users/auth/{uId}", (SwiftDbContext db, string uId) =>
 {
@@ -257,6 +257,7 @@ app.MapPost("/products/new", (SwiftDbContext db, Product Payload) =>
 
     Product NewProduct = new Product()
     {
+        AdminId = Payload.AdminId,
         Title = Payload.Title,
         Description = Payload.Description,
         Category = Payload.Category,
@@ -280,6 +281,7 @@ app.MapPut("/products/update/{pId}", (SwiftDbContext db, int pId, Product payloa
 
     Product SelectedProd = db.Products.FirstOrDefault(o => o.Id == pId);
 
+    SelectedProd.AdminId = payload.AdminId;
     SelectedProd.Title = payload.Title;
     SelectedProd.Description = payload.Description;
     SelectedProd.Category = payload.Category;
@@ -487,11 +489,7 @@ app.MapDelete("/products/{pId}/reviewlist/{rId}/remove", (SwiftDbContext db, int
     }
 });
 
-
 #endregion
-
-
-
 
 
 app.Run();
