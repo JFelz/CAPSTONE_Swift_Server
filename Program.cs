@@ -372,6 +372,12 @@ app.MapGet("/cart/{UID}", (SwiftDbContext db, string UID ) => {
           from x in db.Carts
           where x.CustomerUid == UID
           select x.ProductList;
+
+    if (CartProductList == null)
+    {
+        return Results.NotFound("Cart doesn't exist!");
+    }
+
     return Results.Ok(CartProductList);
 });
 
@@ -379,16 +385,22 @@ app.MapGet("/cart/{UID}", (SwiftDbContext db, string UID ) => {
 
 app.MapPost("/cart/new", (SwiftDbContext db, string UID) =>
 {
+    var CartExists = db.Carts.FirstOrDefault(x => x.CustomerUid == UID);
 
-    Cart NewProduct = new Cart()
+    if (CartExists == null)
     {
-        CustomerUid = UID,
-    };
+        Cart NewProduct = new Cart()
+        {
+            CustomerUid = UID,
+        };
 
-    db.Carts.Add(NewProduct);
-    db.SaveChanges();
+        db.Carts.Add(NewProduct);
+        db.SaveChanges();
 
-    return Results.Created("Cart User created:", NewProduct.CustomerUid);
+        return Results.Created("Cart User created:", NewProduct.CustomerUid);
+    }
+
+    return Results.Conflict("A cart already exists for this user.");
 });
 
 // Add Products to Cart
@@ -417,17 +429,52 @@ app.MapPost("/cart/list", (SwiftDbContext db, string UID, Product payload) =>
 
 app.MapDelete("/cart/delete/all", (SwiftDbContext db, string UID) =>
 {
-    Cart SelectedUserCart = db.Carts.FirstOrDefault(x => x.CustomerUid == UID);
+    var SelectedUserCart = db.Carts
+    .Where(c => c.CustomerUid == UID)
+    .Include(c => c.ProductList)
+    .FirstOrDefault();
+
     if (SelectedUserCart == null)
     {
         return Results.NotFound("I'm sorry! This users cart is empty.");
-    } else
-    {
-        SelectedUserCart.ProductList.RemoveAll(x => SelectedUserCart.ProductList.Contains(x));
     }
 
+    SelectedUserCart.ProductList.Clear();
     db.SaveChanges();
-    return Results.Ok("The product has been removed from Cart!");
+    return Results.Ok("The Cart has been wiped!");
+});
+
+// Remove A Single Product from Cart
+
+app.MapDelete("/cart/delete", (SwiftDbContext db, string UID, int productId) =>
+{
+    try
+    {
+        // Include should come first before selecting
+        var SingleCart = db.Carts
+            .Include(c => c.ProductList)
+            .FirstOrDefault(c => c.CustomerUid == UID);
+
+        if (SingleCart == null)
+        {
+            return Results.NotFound("Sorry for the inconvenience! This Cart does not exist.");
+        }
+        // The reason why it didn't work before is because I didnt have a method after ProductList
+        var SelectedProductList = SingleCart.ProductList.FirstOrDefault(p => p.Id == productId);
+        if (SelectedProductList == null)
+        {
+            return Results.NotFound("Product does not exist in this List");
+        }
+
+        SingleCart.ProductList.Remove(SelectedProductList);
+
+        db.SaveChanges();
+        return Results.Ok(SingleCart.ProductList);
+    }
+    catch (Exception ex)
+    {
+        return Results.Problem(ex.Message);
+    }
 });
 
 
