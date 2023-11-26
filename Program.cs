@@ -362,6 +362,48 @@ app.MapDelete("/orders/{orderId}/list/{productId}/remove", (SwiftDbContext db, i
 
 #endregion
 
+#region Cart
+
+// View Products in Cart by UID
+app.MapGet("/cart/{UID}", (SwiftDbContext db, string UID ) => {
+
+    return db.Carts.FirstOrDefault(o => o.CustomerUid == UID);
+
+});
+
+//Add To Cart
+
+app.MapPost("/cart/new", (SwiftDbContext db, Cart Payload ) =>
+{
+
+    Cart NewProduct = new Cart()
+    {
+        CustomerUid = Payload.CustomerUid,
+    };
+
+    db.Carts.Add(NewProduct);
+    db.SaveChanges();
+    return Results.Ok();
+});
+
+// Remove From Cart 
+
+app.MapDelete("/cart/{pId}/delete", (SwiftDbContext db, string UID, int pId) =>
+{
+    var SelectedUserCart = db.Carts.FirstOrDefault(x => x.CustomerUid == UID);
+    if (SelectedUserCart == null)
+    {
+        return Results.NotFound("I'm sorry! This users cart is empty.");
+    }
+
+    db.Carts.Remove(SelectedUserCart);
+    db.SaveChanges();
+    return Results.Ok("The product has been removed from Cart!");
+});
+
+
+#endregion
+
 #region Review
 
 // View All Reviews
