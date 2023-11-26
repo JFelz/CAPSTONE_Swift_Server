@@ -367,36 +367,65 @@ app.MapDelete("/orders/{orderId}/list/{productId}/remove", (SwiftDbContext db, i
 // View Products in Cart by UID
 app.MapGet("/cart/{UID}", (SwiftDbContext db, string UID ) => {
 
-    return db.Carts.FirstOrDefault(o => o.CustomerUid == UID);
-
+    //return db.Carts.FirstOrDefault(o => o.CustomerUid == UID);
+    var CartProductList =
+          from x in db.Carts
+          where x.CustomerUid == UID
+          select x.ProductList;
+    return Results.Ok(CartProductList);
 });
 
-//Add To Cart
+//Create A Cart
 
-app.MapPost("/cart/new", (SwiftDbContext db, Cart Payload ) =>
+app.MapPost("/cart/new", (SwiftDbContext db, string UID) =>
 {
 
     Cart NewProduct = new Cart()
     {
-        CustomerUid = Payload.CustomerUid,
+        CustomerUid = UID,
     };
 
     db.Carts.Add(NewProduct);
     db.SaveChanges();
-    return Results.Ok();
+
+    return Results.Created("Cart User created:", NewProduct.CustomerUid);
 });
 
-// Remove From Cart 
+// Add Products to Cart
 
-app.MapDelete("/cart/{pId}/delete", (SwiftDbContext db, string UID, int pId) =>
+app.MapPost("/cart/list", (SwiftDbContext db, string UID, Product payload) =>
 {
-    var SelectedUserCart = db.Carts.FirstOrDefault(x => x.CustomerUid == UID);
+    var CartUser = db.Carts
+    .Where(c => c.CustomerUid == UID)
+    .Include(c => c.ProductList)
+    .FirstOrDefault();
+
+    if (CartUser == null)
+    {
+        return Results.NotFound("Cart not found.");
+    }
+
+    CartUser.ProductList.Add(payload);
+
+    db.SaveChanges();
+
+    return Results.Ok(CartUser.ProductList);
+
+});
+
+// Remove All From Cart 
+
+app.MapDelete("/cart/delete/all", (SwiftDbContext db, string UID) =>
+{
+    Cart SelectedUserCart = db.Carts.FirstOrDefault(x => x.CustomerUid == UID);
     if (SelectedUserCart == null)
     {
         return Results.NotFound("I'm sorry! This users cart is empty.");
+    } else
+    {
+        SelectedUserCart.ProductList.RemoveAll(x => SelectedUserCart.ProductList.Contains(x));
     }
 
-    db.Carts.Remove(SelectedUserCart);
     db.SaveChanges();
     return Results.Ok("The product has been removed from Cart!");
 });

@@ -14,6 +14,7 @@ namespace CAPSTONE_Swift_Server.Models
 
         public List<Order> OrderList { get; set; }
 		public List<Review> ReviewList { get; set; }
+		public List<Cart> CartList { get; set; }
 
         #endregion
 
