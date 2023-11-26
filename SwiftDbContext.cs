@@ -13,6 +13,7 @@ namespace CAPSTONE_Swift_Server
 		public DbSet<Review> Reviews { get; set; }
 		public DbSet<PaymentType> PaymentTypes { get; set; }
 		public DbSet<OrderStatus> OrderStatuses { get; set; }
+		public DbSet<Cart> Carts { get; set; }
 
         public SwiftDbContext(DbContextOptions<SwiftDbContext> context) : base(context)
         {
