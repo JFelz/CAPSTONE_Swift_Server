@@ -405,23 +405,28 @@ app.MapPost("/cart/new", (SwiftDbContext db, string UID) =>
 
 // Add Products to Cart
 
-app.MapPost("/cart/list", (SwiftDbContext db, string UID, Product payload) =>
+app.MapPost("/cart/list/add", (SwiftDbContext db, string UID, int ProductId) =>
 {
-    var CartUser = db.Carts
+    var cartUser = db.Carts
     .Where(c => c.CustomerUid == UID)
-    .Include(c => c.ProductList)
+    .Include(x => x.ProductList)
     .FirstOrDefault();
 
-    if (CartUser == null)
+    if (cartUser == null)
     {
         return Results.NotFound("Cart not found.");
     }
 
-    CartUser.ProductList.Add(payload);
+    // This avoids duplicate Products in the Products table. This adds the relationship without compromising the data in other tables.
+    var availableProduct = db.Products
+    .Where(c => c.Id == ProductId)
+    .FirstOrDefault();
+
+    cartUser.ProductList.Add(availableProduct);
 
     db.SaveChanges();
 
-    return Results.Ok(CartUser.ProductList);
+    return Results.Ok(cartUser);
 
 });
 
@@ -446,7 +451,7 @@ app.MapDelete("/cart/delete/all", (SwiftDbContext db, string UID) =>
 
 // Remove A Single Product from Cart
 
-app.MapDelete("/cart/delete", (SwiftDbContext db, string UID, int productId) =>
+app.MapDelete("/cart/${UID}/${productId}/delete", (SwiftDbContext db, string UID, int productId) =>
 {
     try
     {
