@@ -405,7 +405,7 @@ app.MapPost("/cart/new", (SwiftDbContext db, string UID) =>
 
 // Add Products to Cart
 
-app.MapPost("/cart/list/add", (SwiftDbContext db, string UID, int ProductId) =>
+app.MapPost("/cart/{UID}/list/add/{ProductId}", (SwiftDbContext db, string UID, int ProductId) =>
 {
     var cartUser = db.Carts
     .Where(c => c.CustomerUid == UID)
@@ -451,7 +451,7 @@ app.MapDelete("/cart/delete/all", (SwiftDbContext db, string UID) =>
 
 // Remove A Single Product from Cart
 
-app.MapDelete("/cart/${UID}/${productId}/delete", (SwiftDbContext db, string UID, int productId) =>
+app.MapDelete("/cart/{UID}/delete/{productId}", (SwiftDbContext db, string UID, int productId) =>
 {
     try
     {
