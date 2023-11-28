@@ -8,7 +8,7 @@ namespace CAPSTONE_Swift_Server.Models
 		public int Id { get; set; }
 		[Required]
 
-		public int Name { get; set; }
+		public string Name { get; set; }
     }
 }
 
