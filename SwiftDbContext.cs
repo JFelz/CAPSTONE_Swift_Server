@@ -2,6 +2,8 @@
 using CAPSTONE_Swift_Server;
 using Microsoft.EntityFrameworkCore;
 using CAPSTONE_Swift_Server.Models;
+using System.Diagnostics.Metrics;
+using System.Reflection.Emit;
 
 namespace CAPSTONE_Swift_Server
 {
@@ -36,6 +38,11 @@ namespace CAPSTONE_Swift_Server
                 new Product { Id = 5, AdminId = 1, Title = "DROP CAT 38 - SEEKER BLACK", Description = "Time-tested maple construction and super low ride height come together with a futuristic rocker profile to create a board that lets you travel through time to sample the very best of what we've learned over 20-plus years of designing boards. The Drop Cat 38 is perfect for taller riders or people looking for a more stable ride.", Category = "cruiser", Price = 212.49, Length = 38.6, Width = 9.9, Wheelbase = 29.3, SkateSpots = "Pathways, Campus, Mellow Hills",ImageUrl1 = "https://landyachtz.com/cdn/shop/products/Drop-Cat-38-Black-Seeker-Graphic-WEB_b7086e12-107a-4631-8b8e-f0658f0a4088_1800x1800.jpg?v=1614532582", ImageUrl2 = "https://m.media-amazon.com/images/I/41aHxpyyznL._AC_UF1000,1000_QL80_.jpg", ImageUrl3 = "https://m.media-amazon.com/images/I/41IIyAwWnjL._AC_UF1000,1000_QL80_.jpg" },
             });
 
+            modelBuilder.Entity<Order>().HasData(new Order[]
+            {
+                new Order { Id = 1, CustomerUid = "p84DEdgj4kYhU4VKJfFqZX7unHD3", PaymentId = 1, OrderStatusId = 2, CustomerName = "John Mahlar", CustomerEmail = "MahlJ@gmail.com", CustomerPhoneNumber = 4324566788, StreetAddress = "431 Grove Ave", Country = "USA", TownCity = "Salt Lake City", State = "MS", Zipcode = 37205, DateTime = DateTime.Now, Revenue = 581.99, ShippingMethod = "Standard"},
+            });
+
             modelBuilder.Entity<PaymentType>().HasData(new PaymentType[]
             {
                 new PaymentType { Id = 1, Name = "visa"},
@@ -64,8 +71,6 @@ namespace CAPSTONE_Swift_Server
                 new Review { Id = 2, CustomerUid = "p84DEdgj4kYhU4VKJfFqZX7unHD3", Content = "The board was flimsy. Bad product." },
                 new Review { Id = 3, CustomerUid = "p84DEdgj4kYhU4VKJfFqZX7unHD3", Content = "I bought one for my cousin and he loved it!!" },
             });
-
-
         }
                 protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
  => optionsBuilder

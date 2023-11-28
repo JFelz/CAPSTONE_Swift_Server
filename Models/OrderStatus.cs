@@ -9,6 +9,8 @@ namespace CAPSTONE_Swift_Server.Models
 		[Required]
 
 		public string Name { get; set; }
+
+        public List<Order> OrderList { get; set; }
     }
 }
 
