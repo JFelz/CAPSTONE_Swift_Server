@@ -156,6 +156,7 @@ app.MapPost("/orders/new", (SwiftDbContext db, Order Payload) =>
 
     Order NewOrder = new Order()
     {
+        CustomerUid = Payload.CustomerUid,
         CustomerName = Payload.CustomerName,
         CustomerEmail = Payload.CustomerEmail,
         CustomerPhoneNumber = Payload.CustomerPhoneNumber,
@@ -164,10 +165,10 @@ app.MapPost("/orders/new", (SwiftDbContext db, Order Payload) =>
         TownCity = Payload.TownCity,
         State = Payload.State,
         Zipcode = Payload.Zipcode,
-        DateTime = Payload.DateTime,
+        DateTime = DateTime.Now,
         Revenue = Payload.Revenue,
         PaymentId = Payload.PaymentId,
-        OrderStatusId = Payload.PaymentId,
+        OrderStatusId = Payload.OrderStatusId,
         ShippingMethod = Payload.ShippingMethod,
     };
 

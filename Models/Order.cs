@@ -10,7 +10,7 @@ namespace CAPSTONE_Swift_Server.Models
         public int Id { get; set; }
         [Required]
 
-        public int CustomerId { get; set; }
+        public string CustomerUid { get; set; }
         public int PaymentId { get; set; }
         public int OrderStatusId { get; set; }
 
