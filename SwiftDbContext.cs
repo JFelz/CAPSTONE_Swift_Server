@@ -13,8 +13,6 @@ namespace CAPSTONE_Swift_Server
 		public DbSet<Order> Orders { get; set; }
 		public DbSet<Product> Products { get; set; }
 		public DbSet<Review> Reviews { get; set; }
-		public DbSet<PaymentType> PaymentTypes { get; set; }
-		public DbSet<OrderStatus> OrderStatuses { get; set; }
 		public DbSet<Cart> Carts { get; set; }
 
         public SwiftDbContext(DbContextOptions<SwiftDbContext> context) : base(context)
@@ -40,25 +38,8 @@ namespace CAPSTONE_Swift_Server
 
             modelBuilder.Entity<Order>().HasData(new Order[]
             {
-                new Order { Id = 1, CustomerUid = "p84DEdgj4kYhU4VKJfFqZX7unHD3", PaymentId = 1, OrderStatusId = 2, CustomerName = "John Mahlar", CustomerEmail = "MahlJ@gmail.com", CustomerPhoneNumber = 4324566788, StreetAddress = "431 Grove Ave", Country = "USA", TownCity = "Salt Lake City", State = "MS", Zipcode = 37205, DateTime = DateTime.Now, Revenue = 581.99, ShippingMethod = "Standard"},
+                new Order { Id = 1, CustomerUid = "p84DEdgj4kYhU4VKJfFqZX7unHD3", Status = false, CustomerName = "John Mahlar", CustomerEmail = "MahlJ@gmail.com", CustomerPhoneNumber = 4324566788, StreetAddress = "431 Grove Ave", Country = "USA", TownCity = "Salt Lake City", State = "MS", Zipcode = 37205, DateTime = DateTime.Now, Revenue = 581.99, ShippingMethod = "Standard", PaymentType = "visa"},
             });
-
-            modelBuilder.Entity<PaymentType>().HasData(new PaymentType[]
-            {
-                new PaymentType { Id = 1, Name = "visa"},
-                new PaymentType { Id = 2, Name = "mastercard"},
-                new PaymentType { Id = 3, Name = "amex"},
-                new PaymentType { Id = 4, Name = "apple pay"},
-                new PaymentType { Id = 5, Name = "venmo"},
-            });
-
-            modelBuilder.Entity<OrderStatus>().HasData(new OrderStatus[]
-            {
-                new OrderStatus { Id = 1, Name = "active"},
-                new OrderStatus { Id = 2, Name = "closed"},
-                new OrderStatus { Id = 3, Name = "pending"},
-            });
-
 
             modelBuilder.Entity<Cart>().HasData(new Cart[]
             {

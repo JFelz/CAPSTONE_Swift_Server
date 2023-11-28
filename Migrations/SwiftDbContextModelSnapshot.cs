@@ -86,17 +86,10 @@ namespace CAPSTONE_Swift_Server.Migrations
                         .HasColumnType("timestamp without time zone")
                         .HasColumnName("date_time");
 
-                    b.Property<int>("OrderStatusId")
-                        .HasColumnType("integer")
-                        .HasColumnName("order_status_id");
-
-                    b.Property<int>("PaymentId")
-                        .HasColumnType("integer")
-                        .HasColumnName("payment_id");
-
-                    b.Property<int?>("PaymentTypeId")
-                        .HasColumnType("integer")
-                        .HasColumnName("payment_type_id");
+                    b.Property<string>("PaymentType")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("payment_type");
 
                     b.Property<double>("Revenue")
                         .HasColumnType("double precision")
@@ -111,6 +104,10 @@ namespace CAPSTONE_Swift_Server.Migrations
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("state");
+
+                    b.Property<bool>("Status")
+                        .HasColumnType("boolean")
+                        .HasColumnName("status");
 
                     b.Property<string>("StreetAddress")
                         .IsRequired()
@@ -129,12 +126,6 @@ namespace CAPSTONE_Swift_Server.Migrations
                     b.HasKey("Id")
                         .HasName("pk_orders");
 
-                    b.HasIndex("OrderStatusId")
-                        .HasDatabaseName("ix_orders_order_status_id");
-
-                    b.HasIndex("PaymentTypeId")
-                        .HasDatabaseName("ix_orders_payment_type_id");
-
                     b.ToTable("orders", (string)null);
 
                     b.HasData(
@@ -146,99 +137,15 @@ namespace CAPSTONE_Swift_Server.Migrations
                             CustomerName = "John Mahlar",
                             CustomerPhoneNumber = 4324566788L,
                             CustomerUid = "p84DEdgj4kYhU4VKJfFqZX7unHD3",
-                            DateTime = new DateTime(2023, 11, 27, 20, 38, 52, 934, DateTimeKind.Local).AddTicks(6413),
-                            OrderStatusId = 2,
-                            PaymentId = 1,
+                            DateTime = new DateTime(2023, 11, 28, 11, 28, 7, 439, DateTimeKind.Local).AddTicks(2480),
+                            PaymentType = "visa",
                             Revenue = 581.99000000000001,
                             ShippingMethod = "Standard",
                             State = "MS",
+                            Status = false,
                             StreetAddress = "431 Grove Ave",
                             TownCity = "Salt Lake City",
                             Zipcode = 37205
-                        });
-                });
-
-            modelBuilder.Entity("CAPSTONE_Swift_Server.Models.OrderStatus", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("name");
-
-                    b.HasKey("Id")
-                        .HasName("pk_order_statuses");
-
-                    b.ToTable("order_statuses", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "active"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "closed"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "pending"
-                        });
-                });
-
-            modelBuilder.Entity("CAPSTONE_Swift_Server.Models.PaymentType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("name");
-
-                    b.HasKey("Id")
-                        .HasName("pk_payment_types");
-
-                    b.ToTable("payment_types", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "visa"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "mastercard"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "amex"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "apple pay"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Name = "venmo"
                         });
                 });
 
@@ -568,21 +475,6 @@ namespace CAPSTONE_Swift_Server.Migrations
                     b.ToTable("product_review", (string)null);
                 });
 
-            modelBuilder.Entity("CAPSTONE_Swift_Server.Models.Order", b =>
-                {
-                    b.HasOne("CAPSTONE_Swift_Server.Models.OrderStatus", null)
-                        .WithMany("OrderList")
-                        .HasForeignKey("OrderStatusId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_orders_order_statuses_order_status_id");
-
-                    b.HasOne("CAPSTONE_Swift_Server.Models.PaymentType", null)
-                        .WithMany("OrderList")
-                        .HasForeignKey("PaymentTypeId")
-                        .HasConstraintName("fk_orders_payment_types_payment_type_id");
-                });
-
             modelBuilder.Entity("CartProduct", b =>
                 {
                     b.HasOne("CAPSTONE_Swift_Server.Models.Cart", null)
@@ -632,16 +524,6 @@ namespace CAPSTONE_Swift_Server.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_product_review_reviews_review_list_id");
-                });
-
-            modelBuilder.Entity("CAPSTONE_Swift_Server.Models.OrderStatus", b =>
-                {
-                    b.Navigation("OrderList");
-                });
-
-            modelBuilder.Entity("CAPSTONE_Swift_Server.Models.PaymentType", b =>
-                {
-                    b.Navigation("OrderList");
                 });
 #pragma warning restore 612, 618
         }
