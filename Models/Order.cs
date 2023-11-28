@@ -11,8 +11,6 @@ namespace CAPSTONE_Swift_Server.Models
         [Required]
 
         public string CustomerUid { get; set; }
-        public int PaymentId { get; set; }
-        public int OrderStatusId { get; set; }
 
         #endregion
 
@@ -35,6 +33,8 @@ namespace CAPSTONE_Swift_Server.Models
         public DateTime DateTime { get; set; }
         public double Revenue { get; set; }
         public string ShippingMethod { get; set; }
+        public bool Status { get; set; }
+        public string PaymentType { get; set; }
 
         #endregion
     }
