@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http.Json;
 using CAPSTONE_Swift_Server;
 using EFCore.NamingConventions;
 using System.Security.Cryptography;
+using System;
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
@@ -136,16 +137,37 @@ app.MapPut("/users/update/{uid}", (SwiftDbContext db, string uid, User NewUser) 
 #region Order
 
 // View All Orders
-app.MapGet("/orders", (SwiftDbContext db) => {
+app.MapGet("/orders", (SwiftDbContext db) =>
+{
 
     return db.Orders.ToList();
 
 });
 
 // View A Single Order
-app.MapGet("/orders/{oId}", (SwiftDbContext db, int oId) => {
+app.MapGet("/orders/{oId}", (SwiftDbContext db, int oId) =>
+{
 
     return db.Orders.FirstOrDefault(o => o.Id == oId);
+
+});
+
+// View A Single Active Order
+app.MapGet("/orders/{UID}/status", (SwiftDbContext db, string UID) =>
+{
+
+    var ActiveOrder = db.Orders
+    .Where(c => c.CustomerUid == UID)
+    .Where(c => c.Status == true)
+    .Include(x => x.ProductList)
+    .FirstOrDefault();
+
+    if (ActiveOrder == null)
+    {
+        return Results.NotFound("Order Not found or Order Status is false");
+    }
+
+    return Results.Ok(ActiveOrder);
 
 });
 
@@ -167,9 +189,9 @@ app.MapPost("/orders/new", (SwiftDbContext db, Order Payload) =>
         Zipcode = Payload.Zipcode,
         DateTime = DateTime.Now,
         Revenue = Payload.Revenue,
-        PaymentId = Payload.PaymentId,
-        OrderStatusId = Payload.OrderStatusId,
+        Status = Payload.Status,
         ShippingMethod = Payload.ShippingMethod,
+        PaymentType = Payload.PaymentType,
     };
 
     db.Orders.Add(NewOrder);
@@ -178,7 +200,8 @@ app.MapPost("/orders/new", (SwiftDbContext db, Order Payload) =>
 });
 
 // Update Order
-app.MapPut("/orders/update/{oId}", (SwiftDbContext db, int oId, Order Payload) => {
+app.MapPut("/orders/update/{oId}", (SwiftDbContext db, int oId, Order Payload) =>
+{
 
     Order SelectedOrder = db.Orders.FirstOrDefault(o => o.Id == oId);
 
@@ -192,17 +215,18 @@ app.MapPut("/orders/update/{oId}", (SwiftDbContext db, int oId, Order Payload) =
     SelectedOrder.Zipcode = Payload.Zipcode;
     SelectedOrder.DateTime = Payload.DateTime;
     SelectedOrder.Revenue = Payload.Revenue;
-    SelectedOrder.PaymentId = Payload.PaymentId;
-    SelectedOrder.OrderStatusId = Payload.PaymentId;
+    SelectedOrder.Status = Payload.Status;
+    SelectedOrder.PaymentType = Payload.PaymentType;
 
     db.SaveChanges();
     return Results.Ok("The existing order has been updated.");
 });
 
 // Delete An Order
-app.MapDelete("/orders/remove/{oId}", (SwiftDbContext db, int oId) => {
+app.MapDelete("/orders/remove/{oId}", (SwiftDbContext db, int oId) =>
+{
 
-    Order SelectedOrder= db.Orders.FirstOrDefault(o => o.Id == oId);
+    Order SelectedOrder = db.Orders.FirstOrDefault(o => o.Id == oId);
 
     db.Orders.Remove(SelectedOrder);
     db.SaveChanges();
@@ -212,20 +236,20 @@ app.MapDelete("/orders/remove/{oId}", (SwiftDbContext db, int oId) => {
 
 // Get Products from an Order
 
-app.MapGet("/orders/{id}/products", (SwiftDbContext db, int id) =>
+app.MapGet("/orders/{UID}/products", (SwiftDbContext db, string UID) =>
 {
     try
     {
         var SingleOrder = db.Orders
-            .Where(db => db.Id == id)
+            .Where(db => db.CustomerUid == UID)
             .Include(Order => Order.ProductList)
-            .ToList();
+            .FirstOrDefault();
 
         if (SingleOrder == null)
         {
             return Results.NotFound("Sorry for the inconvenience! This order does not exist.");
         }
-        return Results.Ok(SingleOrder);
+        return Results.Ok(SingleOrder.ProductList);
     }
     catch (Exception ex)
     {
@@ -233,97 +257,21 @@ app.MapGet("/orders/{id}/products", (SwiftDbContext db, int id) =>
     }
 });
 
+// Add Products to Order
 
-#endregion
-
-#region Product
-
-// View All Products
-app.MapGet("/products", (SwiftDbContext db) => {
-
-    return db.Products.ToList();
-
-});
-
-// View A Single Product
-app.MapGet("/products/{pId}", (SwiftDbContext db, int pId) => {
-
-    return db.Products.FirstOrDefault(o => o.Id == pId);
-
-});
-
-// Create A Product
-app.MapPost("/products/new", (SwiftDbContext db, Product Payload) =>
+app.MapPost("/orders/{UID}/products/list", (SwiftDbContext db, string UID, Product payload) =>
 {
-
-    Product NewProduct = new Product()
-    {
-        AdminId = Payload.AdminId,
-        Title = Payload.Title,
-        Description = Payload.Description,
-        Category = Payload.Category,
-        Price = Payload.Price,
-        Length = Payload.Length,
-        Width = Payload.Width,
-        Wheelbase = Payload.Wheelbase,
-        SkateSpots = Payload.SkateSpots,
-        ImageUrl1 = Payload.ImageUrl1,
-        ImageUrl2 = Payload.ImageUrl2,
-        ImageUrl3 = Payload.ImageUrl3,
-    };
-
-    db.Products.Add(NewProduct);
-    db.SaveChanges();
-    return Results.Ok();
-});
-
-// Update A Product
-app.MapPut("/products/update/{pId}", (SwiftDbContext db, int pId, Product payload) => {
-
-    Product SelectedProd = db.Products.FirstOrDefault(o => o.Id == pId);
-
-    SelectedProd.AdminId = payload.AdminId;
-    SelectedProd.Title = payload.Title;
-    SelectedProd.Description = payload.Description;
-    SelectedProd.Category = payload.Category;
-    SelectedProd.Price = payload.Price;
-    SelectedProd.Length = payload.Length;
-    SelectedProd.Width = payload.Width;
-    SelectedProd.Wheelbase = payload.Price;
-    SelectedProd.SkateSpots = payload.SkateSpots;
-    SelectedProd.ImageUrl1 = payload.ImageUrl1;
-    SelectedProd.ImageUrl2 = payload.ImageUrl2;
-    SelectedProd.ImageUrl3 = payload.ImageUrl3;
-
-    db.SaveChanges();
-    return Results.Ok("The existing Product has been updated.");
-});
-
-// Delete An Product
-app.MapDelete("/products/remove/{pId}", (SwiftDbContext db, int pId) => {
-
-    Product SelectedProd = db.Products.FirstOrDefault(o => o.Id == pId);
-
-    db.Products.Remove(SelectedProd);
-    db.SaveChanges();
-    return Results.Ok("The product has been removed.");
-
-});
-
-// Add Product to an Order
-
-app.MapPost("/orders/{orderId}/list", (SwiftDbContext db, int orderId, Product payload) =>
-{
-    // Retrieve object reference of Orders in order to manipulate (Not a query result)
     var order = db.Orders
-    .Where(o => o.Id == orderId)
-    .Include(o => o.ProductList)
+    .Where(c => c.CustomerUid == UID)
+    .Include(x => x.ProductList)
     .FirstOrDefault();
 
     if (order == null)
     {
         return Results.NotFound("Order not found.");
     }
+
+    // This avoids duplicate Products in the Products table. This adds the relationship without compromising the data in other tables.
 
     order.ProductList.Add(payload);
 
@@ -363,10 +311,91 @@ app.MapDelete("/orders/{orderId}/list/{productId}/remove", (SwiftDbContext db, i
 
 #endregion
 
+#region Product
+
+// View All Products
+app.MapGet("/products", (SwiftDbContext db) =>
+{
+
+    return db.Products.ToList();
+
+});
+
+// View A Single Product
+app.MapGet("/products/{pId}", (SwiftDbContext db, int pId) =>
+{
+
+    return db.Products.FirstOrDefault(o => o.Id == pId);
+
+});
+
+// Create A Product
+app.MapPost("/products/new", (SwiftDbContext db, Product Payload) =>
+{
+
+    Product NewProduct = new Product()
+    {
+        AdminId = Payload.AdminId,
+        Title = Payload.Title,
+        Description = Payload.Description,
+        Category = Payload.Category,
+        Price = Payload.Price,
+        Length = Payload.Length,
+        Width = Payload.Width,
+        Wheelbase = Payload.Wheelbase,
+        SkateSpots = Payload.SkateSpots,
+        ImageUrl1 = Payload.ImageUrl1,
+        ImageUrl2 = Payload.ImageUrl2,
+        ImageUrl3 = Payload.ImageUrl3,
+    };
+
+    db.Products.Add(NewProduct);
+    db.SaveChanges();
+    return Results.Ok();
+});
+
+// Update A Product
+app.MapPut("/products/update/{pId}", (SwiftDbContext db, int pId, Product payload) =>
+{
+
+    Product SelectedProd = db.Products.FirstOrDefault(o => o.Id == pId);
+
+    SelectedProd.AdminId = payload.AdminId;
+    SelectedProd.Title = payload.Title;
+    SelectedProd.Description = payload.Description;
+    SelectedProd.Category = payload.Category;
+    SelectedProd.Price = payload.Price;
+    SelectedProd.Length = payload.Length;
+    SelectedProd.Width = payload.Width;
+    SelectedProd.Wheelbase = payload.Price;
+    SelectedProd.SkateSpots = payload.SkateSpots;
+    SelectedProd.ImageUrl1 = payload.ImageUrl1;
+    SelectedProd.ImageUrl2 = payload.ImageUrl2;
+    SelectedProd.ImageUrl3 = payload.ImageUrl3;
+
+    db.SaveChanges();
+    return Results.Ok("The existing Product has been updated.");
+});
+
+// Delete An Product
+app.MapDelete("/products/remove/{pId}", (SwiftDbContext db, int pId) =>
+{
+
+    Product SelectedProd = db.Products.FirstOrDefault(o => o.Id == pId);
+
+    db.Products.Remove(SelectedProd);
+    db.SaveChanges();
+    return Results.Ok("The product has been removed.");
+
+});
+
+#endregion
+
 #region Cart
 
 // View Products in Cart by UID
-app.MapGet("/cart/{UID}", (SwiftDbContext db, string UID ) => {
+app.MapGet("/cart/{UID}", (SwiftDbContext db, string UID) =>
+{
 
     //return db.Carts.FirstOrDefault(o => o.CustomerUid == UID);
     var CartProductList =
@@ -489,14 +518,16 @@ app.MapDelete("/cart/{UID}/delete/{productId}", (SwiftDbContext db, string UID, 
 #region Review
 
 // View All Reviews
-app.MapGet("/reviews", (SwiftDbContext db) => {
+app.MapGet("/reviews", (SwiftDbContext db) =>
+{
 
     return db.Reviews.ToList();
 
 });
 
 // View A Single Review
-app.MapGet("/reviews/{rId}", (SwiftDbContext db, int rId) => {
+app.MapGet("/reviews/{rId}", (SwiftDbContext db, int rId) =>
+{
 
     return db.Reviews.FirstOrDefault(o => o.Id == rId);
 
@@ -517,7 +548,8 @@ app.MapPost("/reviews/new", (SwiftDbContext db, Review Payload) =>
 });
 
 // Update A Review
-app.MapPut("/reviews/update/{rId}", (SwiftDbContext db, int rId, Review payload) => {
+app.MapPut("/reviews/update/{rId}", (SwiftDbContext db, int rId, Review payload) =>
+{
 
     Review SelectedReview = db.Reviews.FirstOrDefault(o => o.Id == rId);
 
@@ -529,7 +561,8 @@ app.MapPut("/reviews/update/{rId}", (SwiftDbContext db, int rId, Review payload)
 });
 
 // Delete A Review
-app.MapDelete("/reviews/remove/{rId}", (SwiftDbContext db, int rId) => {
+app.MapDelete("/reviews/remove/{rId}", (SwiftDbContext db, int rId) =>
+{
 
     Review SelectedReview = db.Reviews.FirstOrDefault(o => o.Id == rId);
 
