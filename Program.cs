@@ -236,12 +236,12 @@ app.MapDelete("/orders/remove/{oId}", (SwiftDbContext db, int oId) =>
 
 // Get Products from an Order
 
-app.MapGet("/orders/{UID}/products", (SwiftDbContext db, string UID) =>
+app.MapGet("/orders/{cId}/products", (SwiftDbContext db, int cId) =>
 {
     try
     {
         var SingleOrder = db.Orders
-            .Where(db => db.CustomerUid == UID)
+            .Where(db => db.Id == cId)
             .Include(Order => Order.ProductList)
             .FirstOrDefault();
 
@@ -259,10 +259,11 @@ app.MapGet("/orders/{UID}/products", (SwiftDbContext db, string UID) =>
 
 // Add Products to Order
 
-app.MapPost("/orders/{UID}/products/list", (SwiftDbContext db, string UID, Product payload) =>
+app.MapPost("/orders/{UID}/products/list/{payload}", (SwiftDbContext db, string UID, Product payload) =>
 {
     var order = db.Orders
     .Where(c => c.CustomerUid == UID)
+    .Where(x => x.Status == true)
     .Include(x => x.ProductList)
     .FirstOrDefault();
 
@@ -462,7 +463,7 @@ app.MapPost("/cart/{UID}/list/add/{ProductId}", (SwiftDbContext db, string UID, 
 
 // Remove All From Cart 
 
-app.MapDelete("/cart/delete/all", (SwiftDbContext db, string UID) =>
+app.MapDelete("/cart/{UID}/delete/all", (SwiftDbContext db, string UID) =>
 {
     var SelectedUserCart = db.Carts
     .Where(c => c.CustomerUid == UID)

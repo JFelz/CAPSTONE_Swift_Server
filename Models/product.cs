@@ -10,7 +10,7 @@ namespace CAPSTONE_Swift_Server.Models
 
 		public int AdminId { get; set; }
 
-        #region Relationships
+        #region Navigation
 
         public List<Order> OrderList { get; set; }
 		public List<Review> ReviewList { get; set; }
