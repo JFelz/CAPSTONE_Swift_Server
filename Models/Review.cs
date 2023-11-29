@@ -7,7 +7,7 @@ namespace CAPSTONE_Swift_Server.Models
 		public string CustomerUid { get; set; }
 		public string Content { get; set; }
 
-        #region Relationships
+        #region Navigation
 
         public List<Product> Products { get; set; }
 

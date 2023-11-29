@@ -14,13 +14,11 @@ namespace CAPSTONE_Swift_Server.Models
 
         #endregion
 
-        #region Relationships
+        #region Navigation
 
         public List<Product> ProductList { get; set; }
 
         #endregion
-
-        #region Navigation
 
         public string CustomerName { get; set; }
         public string CustomerEmail { get; set; }
@@ -36,7 +34,6 @@ namespace CAPSTONE_Swift_Server.Models
         public bool Status { get; set; }
         public string PaymentType { get; set; }
 
-        #endregion
     }
 }
 
