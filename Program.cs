@@ -171,6 +171,23 @@ app.MapGet("/orders/{UID}/status", (SwiftDbContext db, string UID) =>
 
 });
 
+// View All Users Order by UID
+app.MapGet("/orders/all/{UID}", (SwiftDbContext db, string UID) =>
+{
+
+    var ActiveOrder = db.Orders
+    .Where(c => c.CustomerUid == UID)
+    .ToList();
+
+    if (ActiveOrder == null)
+    {
+        return Results.NotFound("Order Not found or Order Status is false");
+    }
+
+    return Results.Ok(ActiveOrder);
+
+});
+
 
 // Create New Order
 app.MapPost("/orders/new", (SwiftDbContext db, Order Payload) =>
@@ -203,7 +220,9 @@ app.MapPost("/orders/new", (SwiftDbContext db, Order Payload) =>
 app.MapPut("/orders/update/{oId}", (SwiftDbContext db, int oId, Order Payload) =>
 {
 
-    Order SelectedOrder = db.Orders.FirstOrDefault(o => o.Id == oId);
+     var SelectedOrder = db.Orders
+        .Where(c => c.Id == oId)
+        .FirstOrDefault();
 
     SelectedOrder.CustomerName = Payload.CustomerName;
     SelectedOrder.CustomerEmail = Payload.CustomerEmail;
@@ -259,7 +278,7 @@ app.MapGet("/orders/{cId}/products", (SwiftDbContext db, int cId) =>
 
 // Add Products to Order
 
-app.MapPost("/orders/{UID}/products/list/{payload}", (SwiftDbContext db, string UID, Product payload) =>
+app.MapPost("/orders/{UID}/productslist", (SwiftDbContext db, string UID) =>
 {
     var order = db.Orders
     .Where(c => c.CustomerUid == UID)
@@ -272,13 +291,23 @@ app.MapPost("/orders/{UID}/products/list/{payload}", (SwiftDbContext db, string 
         return Results.NotFound("Order not found.");
     }
 
-    // This avoids duplicate Products in the Products table. This adds the relationship without compromising the data in other tables.
+    var cartData = db.Carts
+    .Where(c => c.CustomerUid == UID)
+    .Include(c => c.ProductList)
+    .FirstOrDefault();
 
-    order.ProductList.Add(payload);
+    if (cartData == null)
+    {
+        return Results.NotFound("Cart not found.");
+    }
+
+    foreach (var obj in cartData?.ProductList)
+    {
+        order.ProductList.Add(obj);
+    }
 
     db.SaveChanges();
-
-    return Results.Ok(order);
+    return Results.Ok(order.ProductList);
 
 });
 
