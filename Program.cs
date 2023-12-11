@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Http.Json;
 using CAPSTONE_Swift_Server;
+using Microsoft.AspNetCore.Mvc;
 using EFCore.NamingConventions;
 using System.Security.Cryptography;
 using System;
@@ -81,7 +82,7 @@ app.MapGet("/users/byIden/{cId}", (SwiftDbContext db, int cId) =>
 
 //// Get Single Users by UID
 
-app.MapGet("/users/auth/{uId}", (SwiftDbContext db, string uId) =>
+app.MapGet("/checkuser/{uId}", (SwiftDbContext db, string uId) =>
 {
     var User = db.Users.FirstOrDefault(x => x.Uid == uId);
 
@@ -117,7 +118,8 @@ app.MapPost("/register", (SwiftDbContext db, User payload) =>
 // Update User
 app.MapPut("/users/update/{uid}", (SwiftDbContext db, string uid, User NewUser) =>
 {
-    User SelectedUser = db.Users.FirstOrDefault(x => x.Uid == uid);
+    var SelectedUser = db.Users.FirstOrDefault(x => x.Uid == uid);
+
     if (SelectedUser == null)
     {
         return Results.NotFound("This customer is not found in the database. Please Try again!");
@@ -224,6 +226,11 @@ app.MapPut("/orders/update/{oId}", (SwiftDbContext db, int oId, Order Payload) =
         .Where(c => c.Id == oId)
         .FirstOrDefault();
 
+    if (SelectedOrder == null)
+    {
+        return Results.NotFound("Order Not Found");
+    }
+
     SelectedOrder.CustomerName = Payload.CustomerName;
     SelectedOrder.CustomerEmail = Payload.CustomerEmail;
     SelectedOrder.CustomerPhoneNumber = Payload.CustomerPhoneNumber;
@@ -245,7 +252,13 @@ app.MapPut("/orders/update/{oId}", (SwiftDbContext db, int oId, Order Payload) =
 app.MapDelete("/orders/remove/{oId}", (SwiftDbContext db, int oId) =>
 {
 
-    Order SelectedOrder = db.Orders.FirstOrDefault(o => o.Id == oId);
+    var SelectedOrder = db.Orders.FirstOrDefault(o => o.Id == oId);
+
+
+    if (SelectedOrder == null)
+    {
+        return Results.NotFound("Order Not Found");
+    }
 
     db.Orders.Remove(SelectedOrder);
     db.SaveChanges();
@@ -255,25 +268,19 @@ app.MapDelete("/orders/remove/{oId}", (SwiftDbContext db, int oId) =>
 
 // Get Products from an Order
 
-app.MapGet("/orders/{cId}/products", (SwiftDbContext db, int cId) =>
+app.MapGet("/orders/{cId}/products", async (SwiftDbContext db, int cId) =>
 {
-    try
-    {
-        var SingleOrder = db.Orders
+        var SingleOrder = await db.Orders
             .Where(db => db.Id == cId)
             .Include(Order => Order.ProductList)
-            .FirstOrDefault();
+            .FirstOrDefaultAsync();
 
         if (SingleOrder == null)
         {
             return Results.NotFound("Sorry for the inconvenience! This order does not exist.");
         }
+
         return Results.Ok(SingleOrder.ProductList);
-    }
-    catch (Exception ex)
-    {
-        return Results.Problem(ex.Message);
-    }
 });
 
 // Add Products to Order
@@ -301,7 +308,7 @@ app.MapPost("/orders/{UID}/productslist", (SwiftDbContext db, string UID) =>
         return Results.NotFound("Cart not found.");
     }
 
-    foreach (var obj in cartData?.ProductList)
+    foreach (var obj in cartData.ProductList)
     {
         order.ProductList.Add(obj);
     }
@@ -328,6 +335,12 @@ app.MapDelete("/orders/{orderId}/list/{productId}/remove", (SwiftDbContext db, i
         }
         // The reason why it didn't work before is because I didnt have a method after ProductList
         var SelectedProductList = SingleOrder.ProductList.FirstOrDefault(p => p.Id == productId);
+
+        if (SelectedProductList == null)
+        {
+            return Results.NotFound("Product List Not Found");
+        }
+
         SingleOrder.ProductList.Remove(SelectedProductList);
 
         db.SaveChanges();
@@ -388,7 +401,13 @@ app.MapPost("/products/new", (SwiftDbContext db, Product Payload) =>
 app.MapPut("/products/update/{pId}", (SwiftDbContext db, int pId, Product payload) =>
 {
 
-    Product SelectedProd = db.Products.FirstOrDefault(o => o.Id == pId);
+    var SelectedProd = db.Products.FirstOrDefault(o => o.Id == pId);
+
+
+    if (SelectedProd == null)
+    {
+        return Results.NotFound("Product Not Found");
+    }
 
     SelectedProd.AdminId = payload.AdminId;
     SelectedProd.Title = payload.Title;
@@ -411,7 +430,12 @@ app.MapPut("/products/update/{pId}", (SwiftDbContext db, int pId, Product payloa
 app.MapDelete("/products/remove/{pId}", (SwiftDbContext db, int pId) =>
 {
 
-    Product SelectedProd = db.Products.FirstOrDefault(o => o.Id == pId);
+    var SelectedProd = db.Products.FirstOrDefault(o => o.Id == pId);
+
+    if (SelectedProd == null)
+    {
+        return Results.NotFound("Product Not Found");
+    }
 
     db.Products.Remove(SelectedProd);
     db.SaveChanges();
@@ -481,6 +505,12 @@ app.MapPost("/cart/{UID}/list/add/{ProductId}", (SwiftDbContext db, string UID, 
     var availableProduct = db.Products
     .Where(c => c.Id == ProductId)
     .FirstOrDefault();
+
+
+    if (availableProduct == null)
+    {
+        return Results.NotFound("Product Not Found");
+    }
 
     cartUser.ProductList.Add(availableProduct);
 
@@ -581,7 +611,13 @@ app.MapPost("/reviews/new", (SwiftDbContext db, Review Payload) =>
 app.MapPut("/reviews/update/{rId}", (SwiftDbContext db, int rId, Review payload) =>
 {
 
-    Review SelectedReview = db.Reviews.FirstOrDefault(o => o.Id == rId);
+    var SelectedReview = db.Reviews.FirstOrDefault(o => o.Id == rId);
+
+
+    if (SelectedReview == null)
+    {
+        return Results.NotFound("Review Not Found");
+    }
 
     SelectedReview.Content = payload.Content;
 
@@ -594,7 +630,13 @@ app.MapPut("/reviews/update/{rId}", (SwiftDbContext db, int rId, Review payload)
 app.MapDelete("/reviews/remove/{rId}", (SwiftDbContext db, int rId) =>
 {
 
-    Review SelectedReview = db.Reviews.FirstOrDefault(o => o.Id == rId);
+    var SelectedReview = db.Reviews.FirstOrDefault(o => o.Id == rId);
+
+
+    if (SelectedReview == null)
+    {
+        return Results.NotFound("Review Not Found");
+    }
 
     db.Reviews.Remove(SelectedReview);
     db.SaveChanges();
@@ -665,6 +707,13 @@ app.MapDelete("/products/{pId}/reviewlist/{rId}/remove", (SwiftDbContext db, int
         }
         // The reason why it didn't work before is because I didnt have a method after ProductList
         var SelectedProductList = SingleProduct.ReviewList.FirstOrDefault(r => r.Id == rId);
+
+
+        if (SelectedProductList == null)
+        {
+            return Results.NotFound("Product List Not Found");
+        }
+
         SingleProduct.ReviewList.Remove(SelectedProductList);
 
         db.SaveChanges();
@@ -677,6 +726,7 @@ app.MapDelete("/products/{pId}/reviewlist/{rId}/remove", (SwiftDbContext db, int
 });
 
 #endregion
+
 
 
 app.Run();
