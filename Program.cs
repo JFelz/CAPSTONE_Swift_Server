@@ -464,7 +464,7 @@ app.MapGet("/cart/{UID}", (SwiftDbContext db, string UID) =>
     return Results.Ok(CartProductList);
 });
 
-//Create A Cart
+//Create A Cart - Add this in Register Form
 
 app.MapPost("/cart/new", (SwiftDbContext db, string UID) =>
 {

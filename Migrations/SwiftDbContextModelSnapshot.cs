@@ -137,7 +137,7 @@ namespace CAPSTONE_Swift_Server.Migrations
                             CustomerName = "John Mahlar",
                             CustomerPhoneNumber = 4324566788L,
                             CustomerUid = "p84DEdgj4kYhU4VKJfFqZX7unHD3",
-                            DateTime = new DateTime(2023, 11, 28, 17, 36, 16, 861, DateTimeKind.Local).AddTicks(8339),
+                            DateTime = new DateTime(2023, 11, 28, 11, 28, 7, 439, DateTimeKind.Local).AddTicks(2480),
                             PaymentType = "visa",
                             Revenue = 581.99000000000001,
                             ShippingMethod = "Standard",

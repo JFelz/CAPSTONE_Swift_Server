@@ -14,10 +14,8 @@ namespace CAPSTONE_Swift_Server.Models
         #endregion
 
         public string Name { get; set; }
-        public string Bio { get; set; }
         public string Email { get; set; }
         public long PhoneNumber { get; set; }
-		public string ImageUrl { get; set; }
         public bool IsAdmin { get; set; }
     }
 }
