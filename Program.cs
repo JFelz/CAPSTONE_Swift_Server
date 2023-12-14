@@ -101,10 +101,8 @@ app.MapPost("/register", (SwiftDbContext db, User payload) =>
     User NewUser = new User()
     {
         Name = payload.Name,
-        Bio = payload.Bio,
         Email = payload.Email,
         PhoneNumber = payload.PhoneNumber,
-        ImageUrl = payload.ImageUrl,
         Uid = payload.Uid,
         IsAdmin = payload.IsAdmin,
     };
@@ -127,7 +125,6 @@ app.MapPut("/users/update/{uid}", (SwiftDbContext db, string uid, User NewUser) 
     SelectedUser.Name = NewUser.Name;
     SelectedUser.Email = NewUser.Email;
     SelectedUser.PhoneNumber = NewUser.PhoneNumber;
-    SelectedUser.ImageUrl = NewUser.ImageUrl;
     db.SaveChanges();
     return Results.Created("/users/update/{uid}", SelectedUser);
 
