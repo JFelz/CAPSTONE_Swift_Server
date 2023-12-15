@@ -13,13 +13,13 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(name: MyAllowSpecificOrigins,
+    options.AddDefaultPolicy(
                       policy =>
                       {
-                          policy.WithOrigins("http://localhost:3000",
+                          policy.WithOrigins("https://localhost:3000",
                                               "https://localhost:7261")
-                          .AllowAnyHeader()
-                          .AllowAnyMethod();
+                          .AllowAnyMethod()
+                          .AllowAnyHeader();
                       });
 });
 
@@ -51,9 +51,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseCors(MyAllowSpecificOrigins);
-
 app.UseRouting();
+
+app.UseCors();
 
 app.UseAuthentication();
 
@@ -74,14 +74,14 @@ app.MapGet("/users", (SwiftDbContext db) =>
 
 app.MapGet("/users/byIden/{cId}", (SwiftDbContext db, int cId) =>
 {
-    return db.Users.FirstOrDefault(x => x.Id == cId);
+    return db.Users.Where(x => x.Id == cId).FirstOrDefault();
 });
 
 //// Get Single Users by UID
 
 app.MapGet("/checkuser/{uId}", (SwiftDbContext db, string uId) =>
 {
-    var User = db.Users.FirstOrDefault(x => x.Uid == uId);
+    var User = db.Users.Where(x => x.Uid == uId).FirstOrDefault();
 
     if (User == null)
     {
