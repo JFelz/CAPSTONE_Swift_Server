@@ -5,7 +5,11 @@ namespace CAPSTONE_Swift_Server.Models
 	{
 		public int Id { get; set; }
 		public string CustomerUid { get; set; }
+
+		public string Subject { get; set; }
 		public string Content { get; set; }
+
+		public int Rating { get; set; }
 
         #region Navigation
 

@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CAPSTONE_Swift_Server.Migrations
 {
     [DbContext(typeof(SwiftDbContext))]
-    [Migration("20231212003552_SwiftPC")]
+    [Migration("20231219015728_SwiftPC")]
     partial class SwiftPC
     {
         /// <inheritdoc />
@@ -133,7 +133,7 @@ namespace CAPSTONE_Swift_Server.Migrations
                             CustomerName = "John Mahlar",
                             CustomerPhoneNumber = 4324566788L,
                             CustomerUid = "p84DEdgj4kYhU4VKJfFqZX7unHD3",
-                            DateTime = new DateTime(2023, 12, 11, 18, 35, 52, 714, DateTimeKind.Local).AddTicks(6701),
+                            DateTime = new DateTime(2023, 12, 18, 19, 57, 28, 230, DateTimeKind.Local).AddTicks(2483),
                             PaymentType = "visa",
                             Revenue = 581.99000000000001,
                             ShippingMethod = "Standard",
@@ -337,7 +337,7 @@ namespace CAPSTONE_Swift_Server.Migrations
                             ImageUrl2 = "https://i.pinimg.com/originals/25/51/a9/2551a9ef0fc02f9dacd3a5fa4fa5f2b8.png",
                             ImageUrl3 = "https://www.loadedboards.com/cdn/shop/files/Loaded-Dervish-Sama-2023-complete-profile-2048p.jpg?v=1683235420&width=2036",
                             Length = 42.799999999999997,
-                            Price = 328.0,
+                            Price = 329.99000000000001,
                             SkateSpots = "Pathways, Campus, Mellow Hills",
                             Title = "DERVISH SAMA",
                             Wheelbase = 31.5,
@@ -353,7 +353,7 @@ namespace CAPSTONE_Swift_Server.Migrations
                             ImageUrl2 = "https://i.pinimg.com/originals/08/d2/97/08d2976506d5171067010399673cc000.jpg",
                             ImageUrl3 = "https://thuroshop.com/cdn/shop/products/Loaded-Tarab-II-Complete-profile-2048p_720x_8234d16f-d563-4243-91f1-ac50fdded4e1.jpg?v=1677611277",
                             Length = 47.0,
-                            Price = 444.0,
+                            Price = 444.99000000000001,
                             SkateSpots = "Pathways, Campus, Mellow Hills",
                             Title = "TARAB II",
                             Wheelbase = 31.25,
@@ -369,7 +369,7 @@ namespace CAPSTONE_Swift_Server.Migrations
                             ImageUrl2 = "https://i.pinimg.com/originals/f4/10/9f/f4109fc8f6c82c6988378481d43bc535.jpg",
                             ImageUrl3 = "https://i.pinimg.com/originals/ad/47/11/ad4711f25374e57ed42551144305b265.jpg",
                             Length = 42.799999999999997,
-                            Price = 899.0,
+                            Price = 899.99000000000001,
                             SkateSpots = "Hill, Mountain, Race Track, all terrain",
                             Title = "SWIFT CITY RIDER 3",
                             Wheelbase = 150.0,
@@ -460,6 +460,15 @@ namespace CAPSTONE_Swift_Server.Migrations
                         .HasColumnType("text")
                         .HasColumnName("customer_uid");
 
+                    b.Property<int>("Rating")
+                        .HasColumnType("integer")
+                        .HasColumnName("rating");
+
+                    b.Property<string>("Subject")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("subject");
+
                     b.HasKey("Id")
                         .HasName("pk_reviews");
 
@@ -470,19 +479,25 @@ namespace CAPSTONE_Swift_Server.Migrations
                         {
                             Id = 1,
                             Content = "I love this product!",
-                            CustomerUid = "p84DEdgj4kYhU4VKJfFqZX7unHD3"
+                            CustomerUid = "p84DEdgj4kYhU4VKJfFqZX7unHD3",
+                            Rating = 5,
+                            Subject = "I approve!"
                         },
                         new
                         {
                             Id = 2,
                             Content = "The board was flimsy. Bad product.",
-                            CustomerUid = "p84DEdgj4kYhU4VKJfFqZX7unHD3"
+                            CustomerUid = "p84DEdgj4kYhU4VKJfFqZX7unHD3",
+                            Rating = 1,
+                            Subject = "Don't recommend! Bad Product."
                         },
                         new
                         {
                             Id = 3,
                             Content = "I bought one for my cousin and he loved it!!",
-                            CustomerUid = "p84DEdgj4kYhU4VKJfFqZX7unHD3"
+                            CustomerUid = "p84DEdgj4kYhU4VKJfFqZX7unHD3",
+                            Rating = 4,
+                            Subject = "Great purchase! Happy Customer"
                         });
                 });
 

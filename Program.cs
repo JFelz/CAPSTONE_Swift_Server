@@ -16,7 +16,7 @@ builder.Services.AddCors(options =>
     options.AddDefaultPolicy(
                       policy =>
                       {
-                          policy.WithOrigins("https://localhost:3000",
+                          policy.WithOrigins("http://localhost:3000",
                                               "https://localhost:7261")
                           .AllowAnyMethod()
                           .AllowAnyHeader();
@@ -79,9 +79,9 @@ app.MapGet("/users/byIden/{cId}", (SwiftDbContext db, int cId) =>
 
 //// Get Single Users by UID
 
-app.MapGet("/checkuser/{uId}", (SwiftDbContext db, string uId) =>
+app.MapGet("/checkUser/{UID}", (SwiftDbContext db, string UID) =>
 {
-    var User = db.Users.Where(x => x.Uid == uId).FirstOrDefault();
+    var User = db.Users.FirstOrDefault(x => x.Uid == UID);
 
     if (User == null)
     {
@@ -107,7 +107,7 @@ app.MapPost("/register", (SwiftDbContext db, User payload) =>
 
     db.Users.Add(NewUser);
     db.SaveChanges();
-    return Results.Ok(NewUser.Name);
+    return Results.Ok(NewUser.Uid);
 });
 
 // Update User
