@@ -52,9 +52,9 @@ namespace CAPSTONE_Swift_Server
 
             modelBuilder.Entity<Review>().HasData(new Review[]
             {
-                new Review { Id = 1, CustomerUid = "p84DEdgj4kYhU4VKJfFqZX7unHD3", Content = "I love this product!" },
-                new Review { Id = 2, CustomerUid = "p84DEdgj4kYhU4VKJfFqZX7unHD3", Content = "The board was flimsy. Bad product." },
-                new Review { Id = 3, CustomerUid = "p84DEdgj4kYhU4VKJfFqZX7unHD3", Content = "I bought one for my cousin and he loved it!!" },
+                new Review { Id = 1, CustomerUid = "p84DEdgj4kYhU4VKJfFqZX7unHD3", Subject = "I approve!", Content = "I love this product!", Rating = 5 },
+                new Review { Id = 2, CustomerUid = "p84DEdgj4kYhU4VKJfFqZX7unHD3", Subject = "Don't recommend! Bad Product.", Content = "The board was flimsy. Bad product.", Rating = 1 },
+                new Review { Id = 3, CustomerUid = "p84DEdgj4kYhU4VKJfFqZX7unHD3", Subject = "Great purchase! Happy Customer", Content = "I bought one for my cousin and he loved it!!", Rating = 4 },
             });
         }
                 protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

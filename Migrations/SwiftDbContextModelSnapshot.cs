@@ -40,6 +40,13 @@ namespace CAPSTONE_Swift_Server.Migrations
                         .HasName("pk_carts");
 
                     b.ToTable("carts", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CustomerUid = "p84DEdgj4kYhU4VKJfFqZX7unHD3"
+                        });
                 });
 
             modelBuilder.Entity("CAPSTONE_Swift_Server.Models.Order", b =>
@@ -130,7 +137,7 @@ namespace CAPSTONE_Swift_Server.Migrations
                             CustomerName = "John Mahlar",
                             CustomerPhoneNumber = 4324566788L,
                             CustomerUid = "p84DEdgj4kYhU4VKJfFqZX7unHD3",
-                            DateTime = new DateTime(2023, 12, 11, 18, 35, 52, 714, DateTimeKind.Local).AddTicks(6701),
+                            DateTime = new DateTime(2023, 11, 28, 11, 28, 7, 439, DateTimeKind.Local).AddTicks(2480),
                             PaymentType = "visa",
                             Revenue = 581.99000000000001,
                             ShippingMethod = "Standard",
@@ -291,150 +298,6 @@ namespace CAPSTONE_Swift_Server.Migrations
                             Title = "DROP CAT 38 - SEEKER BLACK",
                             Wheelbase = 29.300000000000001,
                             Width = 9.9000000000000004
-                        },
-                        new
-                        {
-                            Id = 6,
-                            AdminId = 1,
-                            Category = "downhill",
-                            Description = "A pillar of the Landyachtz DH line for over a decade, the Evo has been under the feet of 3 World Champions as well as countless race winners and podium contenders. The Evo 40 offers a drifty and stable ride that will fill any day in the hills with casually fast runs.",
-                            ImageUrl1 = "https://landyachtz.com/cdn/shop/products/Evo-40-Spectrum-Alt-Setup-WEB-Graphic_1800x1800.jpg?v=1628815758",
-                            ImageUrl2 = "https://landyachtz.com/cdn/shop/products/Evo-40-Spectrum-Alt-Setup-WEB-Grip_1800x1800.jpg?v=1628815758",
-                            ImageUrl3 = "https://landyachtz.com/cdn/shop/products/Evo-40-Spectrum-Alt-Cover-WEB-Angle-01_1800x1800.jpg?v=1628815758",
-                            Length = 39.0,
-                            Price = 259.99000000000001,
-                            SkateSpots = "Hill, Mountain, Race Track",
-                            Title = "EVO 40 - SPECTRUM",
-                            Wheelbase = 31.699999999999999,
-                            Width = 9.8000000000000007
-                        },
-                        new
-                        {
-                            Id = 7,
-                            AdminId = 1,
-                            Category = "downhill",
-                            Description = "Will it freeride? Obviously. Will it also grip? Heck yes! Clayton Arthurs is one of the most versatile members of the Landyachtz team and he wanted his pro board to be able to make the switch from race track to slide jam just as comfortably as he can. The Blaze is designed to be equally effective with small slalom trucks on it for tons of grip, or with 155mm symmetrical trucks and freeride wheels for huge standup slides.",
-                            ImageUrl1 = "https://landyachtz.com/cdn/shop/products/122CP-DHCABC-BCCruiserskateboardgraphic_AD_4761-WEB_b00e1698-5cc0-4f79-bb20-e97ae05c4d55_1800x1800.jpg?v=1646115057",
-                            ImageUrl2 = "https://landyachtz.com/cdn/shop/products/122CP-DHCABC-BCCruiserskateboard4_AD_4787-WEB_3f68fa55-dce3-4f93-a0cc-8d3a50a0f4bd_1800x1800.jpg?v=1646115057",
-                            ImageUrl3 = "https://landyachtz.com/cdn/shop/products/122CP-DHCABC-BCCruiserskateboardwheeldown_AD_4769-WEB_8654a3fe-f1ef-4342-b733-4663fe4276e3_1800x1800.jpg?v=1646115057",
-                            Length = 34.0,
-                            Price = 299.99000000000001,
-                            SkateSpots = "Pathways,Steep Hills, Big Mountain Road, all terrain",
-                            Title = "BLAZE - PT",
-                            Wheelbase = 23.699999999999999,
-                            Width = 9.0
-                        },
-                        new
-                        {
-                            Id = 8,
-                            AdminId = 1,
-                            Category = "dance",
-                            Description = "Designed as an intuitive carving and pumping board, the Dervish Sama longboard is low and easy to ride for both the first-time skater looking to cruise around town and the experienced rider seeking a soulful, snowboard-inspired ride and the ability to explore longboard dancing and freestyle.",
-                            ImageUrl1 = "https://i.pinimg.com/originals/36/2b/64/362b64f26bfaa8cdd77b3efacc2545fc.png",
-                            ImageUrl2 = "https://i.pinimg.com/originals/25/51/a9/2551a9ef0fc02f9dacd3a5fa4fa5f2b8.png",
-                            ImageUrl3 = "https://www.loadedboards.com/cdn/shop/files/Loaded-Dervish-Sama-2023-complete-profile-2048p.jpg?v=1683235420&width=2036",
-                            Length = 42.799999999999997,
-                            Price = 328.0,
-                            SkateSpots = "Pathways, Campus, Mellow Hills",
-                            Title = "DERVISH SAMA",
-                            Wheelbase = 31.5,
-                            Width = 9.0
-                        },
-                        new
-                        {
-                            Id = 9,
-                            AdminId = 1,
-                            Category = "dance",
-                            Description = "Since 2008 Loaded has been on the forefront of longboard dancing. The Tarab II deepens our roots and seeks to advance modern longboard dancing through thoughtful design and material evolution. Ideal for riders who want a versatile and well-rounded platform for surfy boardwalking lines, smooth freestyle trickery, and everything in between.",
-                            ImageUrl1 = "https://i.pinimg.com/originals/06/60/39/0660399607e658a1c527907ba5050811.jpg",
-                            ImageUrl2 = "https://i.pinimg.com/originals/08/d2/97/08d2976506d5171067010399673cc000.jpg",
-                            ImageUrl3 = "https://thuroshop.com/cdn/shop/products/Loaded-Tarab-II-Complete-profile-2048p_720x_8234d16f-d563-4243-91f1-ac50fdded4e1.jpg?v=1677611277",
-                            Length = 47.0,
-                            Price = 444.0,
-                            SkateSpots = "Pathways, Campus, Mellow Hills",
-                            Title = "TARAB II",
-                            Wheelbase = 31.25,
-                            Width = 9.5
-                        },
-                        new
-                        {
-                            Id = 10,
-                            AdminId = 1,
-                            Category = "electric",
-                            Description = "Dubbed City Rider 3 for its evolution in skateboarding, this masterpiece speaks to both new riders and seasoned enthusiasts. We understand that whether you're gliding on city asphalt or bustling streets, the allure of off-road skating remains. Safety, the essence of your experience, is ingeniously woven into the City Rider 3’s DNA. With large 150mm wheels and a wide truck long board, you’re equipped to conquer obstacles with confidence, and the enhanced stability makes each ride a testament to your secure journey.",
-                            ImageUrl1 = "https://i.pinimg.com/originals/81/0e/cd/810ecd7a3a7f76595090e15539884a30.jpg",
-                            ImageUrl2 = "https://i.pinimg.com/originals/f4/10/9f/f4109fc8f6c82c6988378481d43bc535.jpg",
-                            ImageUrl3 = "https://i.pinimg.com/originals/ad/47/11/ad4711f25374e57ed42551144305b265.jpg",
-                            Length = 42.799999999999997,
-                            Price = 899.0,
-                            SkateSpots = "Hill, Mountain, Race Track, all terrain",
-                            Title = "SWIFT CITY RIDER 3",
-                            Wheelbase = 150.0,
-                            Width = 9.0
-                        },
-                        new
-                        {
-                            Id = 11,
-                            AdminId = 1,
-                            Category = "pintail",
-                            Description = "Dropped low, like the Apex 34 and Apex 37, the Pintail 43 is a plate special with all the fixins to satiate your longboard hunger. This tasty delicacy is 43 inches of medium rare satisfaction, served with a slight concave, and the finest graphic art au jus by Joe Hodnicki....",
-                            ImageUrl1 = "https://shop.originalskateboards.com/cdn/shop/products/Maple-Pintail-43-complete-2-1_f30099a0-e636-473f-abb0-f13b8ade70f7_460x.jpg?v=1666908787",
-                            ImageUrl2 = "https://shop.originalskateboards.com/cdn/shop/products/2016_Pintail_43_01-e1478098471915_50de8da7-9c58-4a2f-8dee-d3853f160a6a_460x.jpg?v=1666908788",
-                            ImageUrl3 = "https://shop.originalskateboards.com/cdn/shop/products/2016_Pintail_43_08-e1478098402677_bd220c4c-5164-4f36-b66c-8d4137426c4d_460x.jpg?v=1666908788",
-                            Length = 43.0,
-                            Price = 239.99000000000001,
-                            SkateSpots = "Pathways, Campus, Mellow Hills",
-                            Title = "PINTAIL 43",
-                            Wheelbase = 29.5,
-                            Width = 9.0
-                        },
-                        new
-                        {
-                            Id = 12,
-                            AdminId = 1,
-                            Category = "pintail",
-                            Description = "Our favorite mini-carver sprouted a kicktail, and things have never been the same. Let the Derringer 33 manual its way, your way, and straight into your heart with 3 killer new graphics. ",
-                            ImageUrl1 = "https://shop.originalskateboards.com/cdn/shop/products/Derringer-33-Longboardresurface_c7935af0-e160-4bd5-bf67-1aa8714a9f45.jpg?v=1597175756",
-                            ImageUrl2 = "https://shop.originalskateboards.com/cdn/shop/products/Derringer-33-LongboardV4_f7cc2812-c11f-47cf-894d-92b99ef96c2b.jpg?v=1597175756",
-                            ImageUrl3 = "https://shop.originalskateboards.com/cdn/shop/products/Derringer-33-LongboardV2_655b4655-7808-421a-8c35-2421796a27e3.jpg?v=1597175756",
-                            Length = 33.0,
-                            Price = 199.99000000000001,
-                            SkateSpots = "Pathways, Campus, Mellow Hills",
-                            Title = "DERRINGER 33",
-                            Wheelbase = 29.5,
-                            Width = 9.0
-                        },
-                        new
-                        {
-                            Id = 13,
-                            AdminId = 1,
-                            Category = "freeride",
-                            Description = "The Basalt Tesseract integrates dual kicktails, rocker, wheel well flares, W concave, and multiple wheelbase options into a lightweight package designed for hilly descents, snappy slides, lofty ollies, techy manual combos, and cross-steps galore.\r\n\r\nBuilding on our experience manufacturing the Tarab, we’ve updated the Basalt Tesseract with a high-performance, eco-conscious basalt fabric construction for a lighter, damper, and more freestyle-friendly longboard. Get lit with lava.",
-                            ImageUrl1 = "https://www.kickpush.com.au/assets/alt_1/786143.jpg?20230816102317",
-                            ImageUrl2 = "https://www.kickpush.com.au/assets/full/786143.jpg?20230816102609",
-                            ImageUrl3 = "https://m.media-amazon.com/images/I/71FYI3wbXGL.jpg",
-                            Length = 39.0,
-                            Price = 339.99000000000001,
-                            SkateSpots = "Pathways, Campus, Mellow Hills, City Streets",
-                            Title = "BASALT TESSERACT",
-                            Wheelbase = 26.0,
-                            Width = 9.5
-                        },
-                        new
-                        {
-                            Id = 14,
-                            AdminId = 1,
-                            Category = "beginner",
-                            Description = "The Big Dipper is like a magic carpet with wheels. Coming in at 42.2” long and boasting a healthy amount of flex, this is a longboard in the classic sense of the word. Because of its length, the Big Dipper is very forgiving to ride, whether you are a beginner learning to skate or someone trying to push the limits of what a flexy longboard can do. This beast is the perfect choice for anyone looking for a smooth & stable ride with lots of flow and surf style.",
-                            ImageUrl1 = "https://landyachtz.com/cdn/shop/products/122CP-LBBDPMTN-BigDipperMountainskateboardgraphic_AD_4748-WEB_1800x1800.jpg?v=1651272223",
-                            ImageUrl2 = "https://landyachtz.com/cdn/shop/products/122CP-LBBDPMTN-BigDipperMountainskateboardgrip_AD_4749-WEB_1800x1800.jpg?v=1651272223",
-                            ImageUrl3 = "https://landyachtz.com/cdn/shop/products/122CP-LBBDPMTN-BigDipperMountainskateboardwheeldown_AD_4764-WEB_1800x1800.jpg?v=1651272223",
-                            Length = 42.200000000000003,
-                            Price = 249.99000000000001,
-                            SkateSpots = "Pathways, Campus, Mellow Hills, City Streets, Beach",
-                            Title = "BIG DIPPER - MOUNTAIN",
-                            Wheelbase = 29.800000000000001,
-                            Width = 9.4800000000000004
                         });
                 });
 
@@ -492,10 +355,20 @@ namespace CAPSTONE_Swift_Server.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Bio")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("bio");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("email");
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("image_url");
 
                     b.Property<bool>("IsAdmin")
                         .HasColumnType("boolean")
@@ -524,7 +397,9 @@ namespace CAPSTONE_Swift_Server.Migrations
                         new
                         {
                             Id = 1,
+                            Bio = "I am CEO",
                             Email = "feliz.jovanni@gmail.com",
+                            ImageUrl = "https://media.licdn.com/dms/image/D4E03AQFmqmxDnBFpjw/profile-displayphoto-shrink_800_800/0/1695423491664?e=1706140800&v=beta&t=1YCpHpITTc_ME9YctHk0Vte8hhYzmhieSmxiH258VA4",
                             IsAdmin = true,
                             Name = "Jovanni Feliz",
                             PhoneNumber = 6037779999L,
@@ -533,7 +408,9 @@ namespace CAPSTONE_Swift_Server.Migrations
                         new
                         {
                             Id = 2,
+                            Bio = "I am a Customer",
                             Email = "MahlJ@gmail.com",
+                            ImageUrl = "https://img.freepik.com/free-photo/young-bearded-man-with-striped-shirt_273609-5677.jpg?w=2000",
                             IsAdmin = false,
                             Name = "John Mahlar",
                             PhoneNumber = 4324566788L,
