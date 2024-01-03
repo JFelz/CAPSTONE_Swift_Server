@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CAPSTONE_Swift_Server.Migrations
 {
     [DbContext(typeof(SwiftDbContext))]
-    [Migration("20231225232803_SwiftMac")]
-    partial class SwiftMac
+    [Migration("20240103003320_SwiftPC")]
+    partial class SwiftPC
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -166,7 +166,7 @@ namespace CAPSTONE_Swift_Server.Migrations
                             CustomerName = "John Mahlar",
                             CustomerPhoneNumber = 4324566788L,
                             CustomerUid = "p84DEdgj4kYhU4VKJfFqZX7unHD3",
-                            DateTime = new DateTime(2023, 12, 25, 18, 28, 3, 531, DateTimeKind.Local).AddTicks(2350),
+                            DateTime = new DateTime(2024, 1, 2, 18, 33, 20, 394, DateTimeKind.Local).AddTicks(9803),
                             PaymentType = "visa",
                             Revenue = 581.99000000000001,
                             ShippingMethod = "Standard",

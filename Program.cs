@@ -77,7 +77,22 @@ app.MapGet("/users/byIden/{cId}", (SwiftDbContext db, int cId) =>
     return db.Users.Where(x => x.Id == cId).FirstOrDefault();
 });
 
-//// Get Single Users by UID
+// Get Single Users by UID
+app.MapGet("/checkUser/auth/{UID}", (SwiftDbContext db, string UID) =>
+{
+    var User = db.Users.FirstOrDefault(x => x.CustomerUid == UID);
+
+    if (User == null)
+    {
+        return Results.NotFound("Sorry, Customer not found!");
+    }
+    else
+    {
+        return Results.Ok(User);
+    }
+});
+
+//Check Users by UID
 
 app.MapGet("/checkUser/{UID}", (SwiftDbContext db, string UID) =>
 {
@@ -461,24 +476,32 @@ app.MapGet("/cart/{UID}", (SwiftDbContext db, string UID) =>
 
 //Create A Cart - Add this in Register Form
 
-app.MapPost("/cart/new", (SwiftDbContext db, string UID) =>
+app.MapPost("/cart/new/{UID}", (SwiftDbContext db, string UID) =>
 {
-    var CartExists = db.Carts.FirstOrDefault(x => x.CustomerUid == UID);
-
-    if (CartExists == null)
+    try
     {
-        Cart NewProduct = new Cart()
+
+        var CartExists = db.Carts.FirstOrDefault(x => x.CustomerUid == UID);
+
+        if (CartExists == null)
         {
-            CustomerUid = UID,
-        };
+            Cart NewProduct = new Cart()
+            {
+                CustomerUid = UID,
+            };
 
-        db.Carts.Add(NewProduct);
-        db.SaveChanges();
+            db.Carts.Add(NewProduct);
+            db.SaveChanges();
+            return Results.Created("Cart User created:", NewProduct.CustomerUid);
+        }
 
-        return Results.Created("Cart User created:", NewProduct.CustomerUid);
+        return Results.Content("Cart User Exists:", CartExists.CustomerUid);
     }
 
-    return Results.Conflict("A cart already exists for this user.");
+    catch (Exception ex)
+    {
+        return Results.Problem(ex.Message);
+    }
 });
 
 // Add Products to Cart
