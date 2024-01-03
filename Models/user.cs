@@ -9,7 +9,7 @@ namespace CAPSTONE_Swift_Server.Models
 
         public int Id { get; set; }
 		[Required]
-        public string? Uid { get; set; }
+        public string? CustomerUid { get; set; }
 
         #endregion
 

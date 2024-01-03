@@ -81,7 +81,7 @@ app.MapGet("/users/byIden/{cId}", (SwiftDbContext db, int cId) =>
 
 app.MapGet("/checkUser/{UID}", (SwiftDbContext db, string UID) =>
 {
-    var User = db.Users.FirstOrDefault(x => x.Uid == UID);
+    var User = db.Users.FirstOrDefault(x => x.CustomerUid == UID);
 
     if (User == null)
     {
@@ -101,19 +101,19 @@ app.MapPost("/register", (SwiftDbContext db, User payload) =>
         Name = payload.Name,
         Email = payload.Email,
         PhoneNumber = payload.PhoneNumber,
-        Uid = payload.Uid,
+        CustomerUid = payload.CustomerUid,
         IsAdmin = payload.IsAdmin,
     };
 
     db.Users.Add(NewUser);
     db.SaveChanges();
-    return Results.Ok(NewUser.Uid);
+    return Results.Ok(NewUser.CustomerUid);
 });
 
 // Update User
 app.MapPut("/users/update/{uid}", (SwiftDbContext db, string uid, User NewUser) =>
 {
-    var SelectedUser = db.Users.FirstOrDefault(x => x.Uid == uid);
+    var SelectedUser = db.Users.FirstOrDefault(x => x.CustomerUid == uid);
 
     if (SelectedUser == null)
     {
@@ -718,6 +718,37 @@ app.MapDelete("/products/{pId}/reviewlist/{rId}/remove", (SwiftDbContext db, int
         return Results.Problem(ex.Message);
     }
 });
+
+#endregion
+
+#region Newsletter
+
+app.MapGet("/newsletter/UID", (SwiftDbContext db, string UID) =>
+{
+    var CurrentUser = db.NewsletterUsers.FirstOrDefault(x => x.CustomerUid == UID);
+
+    if (CurrentUser?.CustomerUid != UID)
+    {
+        return Results.Ok();
+    }
+    else return Results.Problem("You already have a registered email.");
+});
+
+app.MapPost("/newsletter/new", (SwiftDbContext db, Newsletteruser payload) =>
+{
+    Newsletteruser NewUser = new Newsletteruser()
+    {
+        CustomerUid = payload.CustomerUid,
+        Email = payload.Email,
+    };
+
+    db.NewsletterUsers.Add(NewUser);
+    db.SaveChanges();
+    return Results.Ok("Newsletter User added!");
+});
+
+
+
 
 #endregion
 
