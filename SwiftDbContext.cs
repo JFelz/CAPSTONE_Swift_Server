@@ -14,6 +14,7 @@ namespace CAPSTONE_Swift_Server
 		public DbSet<Product> Products { get; set; }
 		public DbSet<Review> Reviews { get; set; }
 		public DbSet<Cart> Carts { get; set; }
+        public DbSet<Newsletteruser> NewsletterUsers { get; set; }
 
         public SwiftDbContext(DbContextOptions<SwiftDbContext> context) : base(context)
         {
@@ -23,8 +24,8 @@ namespace CAPSTONE_Swift_Server
             // seed data with campsite types
             modelBuilder.Entity<User>().HasData(new User[]
             {
-                new User { Id = 1, Uid = "zcxxFyDPReWizoUPtyPru9w072J3", Name = "Jovanni Feliz", Email = "feliz.jovanni@gmail.com", PhoneNumber = 6037779999, IsAdmin = true },
-                new User { Id = 2, Uid = "p84DEdgj4kYhU4VKJfFqZX7unHD3", Name = "John Mahlar", Email = "MahlJ@gmail.com", PhoneNumber = 4324566788, IsAdmin = false },
+                new User { Id = 1, CustomerUid = "zcxxFyDPReWizoUPtyPru9w072J3", Name = "Jovanni Feliz", Email = "feliz.jovanni@gmail.com", PhoneNumber = 6037779999, IsAdmin = true },
+                new User { Id = 2, CustomerUid = "p84DEdgj4kYhU4VKJfFqZX7unHD3", Name = "John Mahlar", Email = "MahlJ@gmail.com", PhoneNumber = 4324566788, IsAdmin = false },
             });
 
             modelBuilder.Entity<Product>().HasData(new Product[]
@@ -55,6 +56,11 @@ namespace CAPSTONE_Swift_Server
                 new Review { Id = 1, CustomerUid = "p84DEdgj4kYhU4VKJfFqZX7unHD3", Subject = "I approve!", Content = "I love this product!", Rating = 5 },
                 new Review { Id = 2, CustomerUid = "p84DEdgj4kYhU4VKJfFqZX7unHD3", Subject = "Don't recommend! Bad Product.", Content = "The board was flimsy. Bad product.", Rating = 1 },
                 new Review { Id = 3, CustomerUid = "p84DEdgj4kYhU4VKJfFqZX7unHD3", Subject = "Great purchase! Happy Customer", Content = "I bought one for my cousin and he loved it!!", Rating = 4 },
+            });
+
+            modelBuilder.Entity<Newsletteruser>().HasData(new Newsletteruser[]
+            {
+                new Newsletteruser { Id = 1, CustomerUid = "zcxxFyDPReWizoUPtyPru9w072J3", Email = "feliz.jovanni@gmail.com" }
             });
         }
                 protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

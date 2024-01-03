@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CAPSTONE_Swift_Server.Migrations
 {
     [DbContext(typeof(SwiftDbContext))]
-    [Migration("20231219015728_SwiftPC")]
-    partial class SwiftPC
+    [Migration("20231225232803_SwiftMac")]
+    partial class SwiftMac
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -43,6 +43,39 @@ namespace CAPSTONE_Swift_Server.Migrations
                         .HasName("pk_carts");
 
                     b.ToTable("carts", (string)null);
+                });
+
+            modelBuilder.Entity("CAPSTONE_Swift_Server.Models.Newsletteruser", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CustomerUid")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("customer_uid");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("email");
+
+                    b.HasKey("Id")
+                        .HasName("pk_newsletter_users");
+
+                    b.ToTable("newsletter_users", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CustomerUid = "zcxxFyDPReWizoUPtyPru9w072J3",
+                            Email = "feliz.jovanni@gmail.com"
+                        });
                 });
 
             modelBuilder.Entity("CAPSTONE_Swift_Server.Models.Order", b =>
@@ -133,7 +166,7 @@ namespace CAPSTONE_Swift_Server.Migrations
                             CustomerName = "John Mahlar",
                             CustomerPhoneNumber = 4324566788L,
                             CustomerUid = "p84DEdgj4kYhU4VKJfFqZX7unHD3",
-                            DateTime = new DateTime(2023, 12, 18, 19, 57, 28, 230, DateTimeKind.Local).AddTicks(2483),
+                            DateTime = new DateTime(2023, 12, 25, 18, 28, 3, 531, DateTimeKind.Local).AddTicks(2350),
                             PaymentType = "visa",
                             Revenue = 581.99000000000001,
                             ShippingMethod = "Standard",
@@ -510,6 +543,11 @@ namespace CAPSTONE_Swift_Server.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("CustomerUid")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("customer_uid");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("text")
@@ -528,11 +566,6 @@ namespace CAPSTONE_Swift_Server.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("phone_number");
 
-                    b.Property<string>("Uid")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("uid");
-
                     b.HasKey("Id")
                         .HasName("pk_users");
 
@@ -542,20 +575,20 @@ namespace CAPSTONE_Swift_Server.Migrations
                         new
                         {
                             Id = 1,
+                            CustomerUid = "zcxxFyDPReWizoUPtyPru9w072J3",
                             Email = "feliz.jovanni@gmail.com",
                             IsAdmin = true,
                             Name = "Jovanni Feliz",
-                            PhoneNumber = 6037779999L,
-                            Uid = "zcxxFyDPReWizoUPtyPru9w072J3"
+                            PhoneNumber = 6037779999L
                         },
                         new
                         {
                             Id = 2,
+                            CustomerUid = "p84DEdgj4kYhU4VKJfFqZX7unHD3",
                             Email = "MahlJ@gmail.com",
                             IsAdmin = false,
                             Name = "John Mahlar",
-                            PhoneNumber = 4324566788L,
-                            Uid = "p84DEdgj4kYhU4VKJfFqZX7unHD3"
+                            PhoneNumber = 4324566788L
                         });
                 });
 
