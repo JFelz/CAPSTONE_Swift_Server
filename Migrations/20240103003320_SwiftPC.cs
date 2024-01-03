@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CAPSTONE_Swift_Server.Migrations
 {
     /// <inheritdoc />
-    public partial class SwiftMac : Migration
+    public partial class SwiftPC : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -204,7 +204,7 @@ namespace CAPSTONE_Swift_Server.Migrations
             migrationBuilder.InsertData(
                 table: "orders",
                 columns: new[] { "id", "country", "customer_email", "customer_name", "customer_phone_number", "customer_uid", "date_time", "payment_type", "revenue", "shipping_method", "state", "status", "street_address", "town_city", "zipcode" },
-                values: new object[] { 1, "USA", "MahlJ@gmail.com", "John Mahlar", 4324566788L, "p84DEdgj4kYhU4VKJfFqZX7unHD3", new DateTime(2023, 12, 25, 18, 28, 3, 531, DateTimeKind.Local).AddTicks(2350), "visa", 581.99000000000001, "Standard", "MS", false, "431 Grove Ave", "Salt Lake City", 37205 });
+                values: new object[] { 1, "USA", "MahlJ@gmail.com", "John Mahlar", 4324566788L, "p84DEdgj4kYhU4VKJfFqZX7unHD3", new DateTime(2024, 1, 2, 18, 33, 20, 394, DateTimeKind.Local).AddTicks(9803), "visa", 581.99000000000001, "Standard", "MS", false, "431 Grove Ave", "Salt Lake City", 37205 });
 
             migrationBuilder.InsertData(
                 table: "products",
