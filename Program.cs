@@ -746,15 +746,9 @@ app.MapDelete("/products/{pId}/reviewlist/{rId}/remove", (SwiftDbContext db, int
 
 #region Newsletter
 
-app.MapGet("/newsletter/UID", (SwiftDbContext db, string UID) =>
+app.MapGet("/newsletter/{UID}", (SwiftDbContext db, string UID) =>
 {
-    var CurrentUser = db.NewsletterUsers.FirstOrDefault(x => x.CustomerUid == UID);
-
-    if (CurrentUser?.CustomerUid != UID)
-    {
-        return Results.Ok();
-    }
-    else return Results.Problem("You already have a registered email.");
+    return db.NewsletterUsers.FirstOrDefault(x => x.CustomerUid == UID);
 });
 
 app.MapPost("/newsletter/new", (SwiftDbContext db, Newsletteruser payload) =>
